@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Halyna Karpan](https://up.htmlacademy.ru/javascript/17/user/895235).
-* Наставник: [Дмитрий_Мирошниченко].
+* Наставник: [Дмитрий_Мирошниченко](https://up.htmlacademy.ru/javascript/17/user/591417).
 
 ---
 
