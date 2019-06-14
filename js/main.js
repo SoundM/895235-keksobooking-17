@@ -25,7 +25,7 @@ var createRandomOffers = function () {
     var avatar = 'img/avatars/user0' + (i + 1) + '.png';
     var type = OFFER_TYPE[getRandomNumber(0, OFFER_TYPE.length - 1)];
     var locationX = getRandomNumber(PIN_WIDTH / 2, widthMap - PIN_WIDTH / 2) + 'px';
-    var locationY = getRandomNumber(130 + PIN_HEIGHT, 630) + 'px';
+    var locationY = getRandomNumber(130, 630 - PIN_HEIGHT) + 'px';
     var location = [locationX, locationY];
 
     var offer = { // Можно короче в 4 строки сразу author: 'img/avatars/user0' + (i + 1) + '.png'; но смущает ТЗ
