@@ -1,8 +1,9 @@
 'use strict';
 
-var NUMBER_OF_OFFERS = 8;
+var NUMBER_OF_OFFERS = 18;
 var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
-var PIN_WIDTH = 80; // Метка в активном состоянии 50рх + 2*15рх от теней
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
 var widthMap = document.querySelector('.map').offsetWidth;
 
 // переключаем карту из неактивного состояния в активное
@@ -24,7 +25,7 @@ var createRandomOffers = function () {
     var avatar = 'img/avatars/user0' + (i + 1) + '.png';
     var type = OFFER_TYPE[getRandomNumber(0, OFFER_TYPE.length - 1)];
     var locationX = getRandomNumber(PIN_WIDTH / 2, widthMap - PIN_WIDTH / 2) + 'px';
-    var locationY = getRandomNumber(130, 630) + 'px';
+    var locationY = getRandomNumber(130 + PIN_HEIGHT, 630) + 'px';
     var location = [locationX, locationY];
 
     var offer = { // Можно короче в 4 строки сразу author: 'img/avatars/user0' + (i + 1) + '.png'; но смущает ТЗ
@@ -46,8 +47,9 @@ var renderOffers = function () {
     var offerElement = pin.cloneNode(true);
     offerElement.style.left = offers[i].location[0];
     offerElement.style.top = offers[i].location[1];
-    offerElement.children[0].src = offers[i].author;
-    offerElement.children[0].alt = 'Заголовок объявления';
+    // !Тут лучше через querySelector, защитит от последствий возможных изменений DOMa в будущем
+    offerElement.querySelector('.map__pin img').src = offers[i].author;
+    offerElement.querySelector('.map__pin img').alt = 'Заголовок объявления';
 
     fragment.appendChild(offerElement);
   }
