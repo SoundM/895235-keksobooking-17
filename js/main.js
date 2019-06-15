@@ -1,6 +1,6 @@
 'use strict';
 
-var NUMBER_OF_OFFERS = 18;
+var NUMBER_OF_OFFERS = 8;
 var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
@@ -45,11 +45,12 @@ var renderOffers = function () {
 
   for (var i = 0; i < offers.length; i++) {
     var offerElement = pin.cloneNode(true);
+    var pinView = offerElement.querySelector('.map__pin img');
+
     offerElement.style.left = offers[i].location[0];
     offerElement.style.top = offers[i].location[1];
-    // !Тут лучше через querySelector, защитит от последствий возможных изменений DOMa в будущем
-    offerElement.querySelector('.map__pin img').src = offers[i].author;
-    offerElement.querySelector('.map__pin img').alt = 'Заголовок объявления';
+    pinView.src = offers[i].author;
+    pinView.alt = 'Заголовок объявления';
 
     fragment.appendChild(offerElement);
   }
