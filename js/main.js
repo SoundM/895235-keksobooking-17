@@ -6,13 +6,36 @@ var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var widthMap = document.querySelector('.map').offsetWidth;
 
-// переключаем карту из неактивного состояния в активное
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
-var pinOffers = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
+var adForm = document.querySelector('.ad-form');
+var adFormInputsSelects = adForm.querySelectorAll('input, select');
+var adFormAddressInput = adForm.querySelector('#address');
+
+var map = document.querySelector('.map');
+var mapFilters = map.querySelector('.map__filters');
+var mapFiltersInputsSelects = mapFilters.querySelectorAll('input, select');
+var mapPinMain = map.querySelector('.map__pin--main');
+
+var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
 var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
 var offers = [];
+
+// Функция расстановки disabled для input и select в форме
+var setDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+// Функция снятия disabled
+var unsetDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].removeAttribute('disabled');
+  }
+};
+
+setDisabled(adFormInputsSelects);
+setDisabled(mapFiltersInputsSelects);
 
 // Генератор случайных целых чисел в заданом диапазоне
 var getRandomNumber = function (min, max) {
@@ -54,7 +77,23 @@ var renderOffers = function () {
 
     fragment.appendChild(offerElement);
   }
-  pinOffers.appendChild(fragment);
+  mapPins.appendChild(fragment);
 };
 
-renderOffers();
+var counter = 0;
+mapPinMain.addEventListener('click', function () {
+  counter++;
+  if (counter === 1) {
+    renderOffers();
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    unsetDisabled(adFormInputsSelects);
+    unsetDisabled(mapFiltersInputsSelects);
+  }
+});
+
+mapPinMain.addEventListener('mouseup', function () {
+  adFormAddressInput.placeholder = PIN_WIDTH / 2 + ',' + PIN_HEIGHT;
+});
+
+adFormAddressInput.placeholder = PIN_WIDTH / 2 + ',' + PIN_WIDTH / 2;
