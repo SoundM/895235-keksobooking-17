@@ -4,6 +4,8 @@ var NUMBER_OF_OFFERS = 8;
 var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 87;
 var widthMap = document.querySelector('.map').offsetWidth;
 
 
@@ -82,7 +84,6 @@ var renderOffers = function () {
 
 var counter = 0;
 mapPinMain.addEventListener('click', function () {
-  counter++;
   if (counter === 1) {
     renderOffers();
     map.classList.remove('map--faded');
@@ -90,10 +91,20 @@ mapPinMain.addEventListener('click', function () {
     unsetDisabled(adFormInputsSelects);
     unsetDisabled(mapFiltersInputsSelects);
   }
+  counter++;
 });
+
+adFormAddressInput.value = '570, 375';
+
+// Функция получения координат острого конца Главного Пина
+var getPinMainCoordinates = function (elementWidth, elementHeight) { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
+  var mapCoordinates = map.getBoundingClientRect();
+  var pinMainCoordinates = mapPinMain.getBoundingClientRect();
+  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + elementWidth / 2;
+  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + elementHeight;
+  adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
+};
 
 mapPinMain.addEventListener('mouseup', function () {
-  adFormAddressInput.placeholder = PIN_WIDTH / 2 + ',' + PIN_HEIGHT;
+  getPinMainCoordinates(PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
 });
-
-adFormAddressInput.placeholder = PIN_WIDTH / 2 + ',' + PIN_WIDTH / 2;
