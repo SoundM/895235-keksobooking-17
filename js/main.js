@@ -4,15 +4,40 @@ var NUMBER_OF_OFFERS = 8;
 var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 87;
 var widthMap = document.querySelector('.map').offsetWidth;
 
-// переключаем карту из неактивного состояния в активное
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
-var pinOffers = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
+var adForm = document.querySelector('.ad-form');
+var adFormInputsSelects = adForm.querySelectorAll('input, select');
+var adFormAddressInput = adForm.querySelector('#address');
+
+var map = document.querySelector('.map');
+var mapFilters = map.querySelector('.map__filters');
+var mapFiltersInputsSelects = mapFilters.querySelectorAll('input, select');
+var mapPinMain = map.querySelector('.map__pin--main');
+
+var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
 var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
 var offers = [];
+
+// Функция расстановки disabled для input и select в форме
+var setDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+// Функция снятия disabled
+var unsetDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].removeAttribute('disabled');
+  }
+};
+
+setDisabled(adFormInputsSelects);
+setDisabled(mapFiltersInputsSelects);
 
 // Генератор случайных целых чисел в заданом диапазоне
 var getRandomNumber = function (min, max) {
@@ -54,7 +79,32 @@ var renderOffers = function () {
 
     fragment.appendChild(offerElement);
   }
-  pinOffers.appendChild(fragment);
+  mapPins.appendChild(fragment);
 };
 
-renderOffers();
+var counter = 0;
+mapPinMain.addEventListener('click', function () {
+  counter++;
+  if (counter === 1) {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    unsetDisabled(adFormInputsSelects);
+    unsetDisabled(mapFiltersInputsSelects);
+    renderOffers();
+  }
+});
+
+adFormAddressInput.value = '570, 375';
+
+// Функция получения координат острого конца Главного Пина
+var getPinMainCoordinates = function (elementWidth, elementHeight) { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
+  var mapCoordinates = map.getBoundingClientRect();
+  var pinMainCoordinates = mapPinMain.getBoundingClientRect();
+  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + elementWidth / 2;
+  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + elementHeight;
+  adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
+};
+
+mapPinMain.addEventListener('mouseup', function () {
+  getPinMainCoordinates(PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+});
