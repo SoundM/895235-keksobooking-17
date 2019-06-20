@@ -82,98 +82,70 @@ var renderOffers = function () {
   mapPins.appendChild(fragment);
 };
 
-var counter = 0;
-mapPinMain.addEventListener('click', function () {
-  counter++;
-  if (counter === 1) {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    unsetDisabled(adFormInputsSelects);
-    unsetDisabled(mapFiltersInputsSelects);
-    renderOffers();
-  }
-});
+// Функция вызова обработчика активации страницы по клику
+var getActivePage = function () {
+  var counter = 0;
+  mapPinMain.addEventListener('click', function () {
+    counter++;
+    if (counter === 1) {
+      activationPage();
+      renderOffers();
+      mapPinMain.removeEventListener('click');
+    }
+  });
+};
 
-adFormAddressInput.value = '570, 375';
+// Функция активации страницы
+var activationPage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  unsetDisabled(adFormInputsSelects);
+  unsetDisabled(mapFiltersInputsSelects);
+};
+
 
 // Функция получения координат острого конца Главного Пина
-var getPinMainCoordinates = function (elementWidth, elementHeight) { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
+var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
   var mapCoordinates = map.getBoundingClientRect();
   var pinMainCoordinates = mapPinMain.getBoundingClientRect();
-  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + elementWidth / 2;
-  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + elementHeight;
+  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2;
+  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT;
   adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
 };
 
 mapPinMain.addEventListener('mouseup', function () {
-  getPinMainCoordinates(PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+  getPinMainCoordinates();
 });
+
+getActivePage();
 
 // Часть вторая
 
-var inputTitle = adForm.querySelector('#title');
 var inputPrice = adForm.querySelector('#price');
 var inputType = adForm.querySelector('#type');
 var inputTimeIn = adForm.querySelector('#timein');
 var inputTimeOut = adForm.querySelector('#timeout');
+var TypePrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
 
+// Валидация данных формы заголовка сразу в HTML minlength="30" maxlength="100" required
 
-// Валидация данных формы заголовка
-inputTitle.addEventListener('input', function (evt) {
-  var target = evt.target;
-  inputTitle.required = true;
+// Валидация данных формы типа жилья. Смнхронизация тип-цена через объект TypePrice
+var onFieldTypeChange = function (type) {
+  inputPrice.min = TypePrice[type];
+  inputPrice.placeholder = TypePrice[type];
+};
 
-  if (target.value.length < 30) {
-    target.setCustomValidity('Заголовок объявления не должен быть короче 30 символов');
-  } else if (target.value.length > 100) {
-    target.setCustomValidity('Заголовок объявления не должен быть длиннее 100 символов');
-  } else {
-    target.setCustomValidity('');
-  }
+inputType.addEventListener('change', function () {
+  onFieldTypeChange(inputType.value);
 });
 
-// Валидация данных формы типа жилья
-inputPrice.addEventListener('input', function (evt) {
-  var target = evt.target;
-  target.required = true;
-  target.type = 'number';
-
-  if (inputType.value === 'bungalo' && target.value < 0) {
-    target.setCustomValidity('Цена за ночь не может быть ниже 0');
-  } else if (inputType.value === 'flat' && target.value < 1000) {
-    target.setCustomValidity('Цена за ночь не может быть ниже 1 000');
-  } else if (inputType.value === 'house' && target.value < 5000) {
-    target.setCustomValidity('Цена за ночь не может быть ниже 5 000');
-  } else if (inputType.value === 'palace' && target.value < 10000) {
-    target.setCustomValidity('Цена за ночь не может быть ниже 10 000');
-  } else if (target.value > 1000000) {
-    target.setCustomValidity('Цена за ночь не может быть более 1 000 000');
-  } else {
-    target.setCustomValidity('');
-  }
-});
-
-// Устанавливаем связь между типом жилья и ценой за ночь
-inputType.addEventListener('input', function (evt) {
-  var target = evt.target;
-
-  if (target.value === 'bungalo') {
-    inputPrice.setAttribute('min', 0);
-    inputPrice.placeholder = '0';
-  } else if (target.value === 'flat') {
-    inputPrice.setAttribute('min', 1000);
-    inputPrice.placeholder = '1 000';
-  } else if (target.value === 'house') {
-    inputPrice.setAttribute('min', 5000);
-    inputPrice.placeholder = '5 000';
-  } else {
-    inputPrice.setAttribute('min', 10000);
-    inputPrice.placeholder = '10 000';
-  }
-});
-
-// Запрещаем ручное редактирование поля адреса
-setDisabled(adFormAddressInput);
+// Запрещаем ручное редактирование поля адреса в HTML. Когда к тегу <input> добавляется атрибут readonly, текстовое
+// поле не может изменяться пользователем, в том числе вводиться новый текст или модифицироваться существующий. Тем не менее, состояние и содержимое поля можно менять с помощью скриптов.
 
 // Связываем время заезда и выезда
 inputTimeIn.addEventListener('input', function () {
@@ -183,4 +155,3 @@ inputTimeIn.addEventListener('input', function () {
 inputTimeOut.addEventListener('input', function () {
   inputTimeIn.value = inputTimeOut.value;
 });
-
