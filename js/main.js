@@ -84,14 +84,14 @@ var renderOffers = function () {
 
 var counter = 0;
 mapPinMain.addEventListener('click', function () {
+  counter++;
   if (counter === 1) {
-    renderOffers();
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     unsetDisabled(adFormInputsSelects);
     unsetDisabled(mapFiltersInputsSelects);
+    renderOffers();
   }
-  counter++;
 });
 
 adFormAddressInput.value = '570, 375';
