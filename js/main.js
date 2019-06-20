@@ -82,34 +82,12 @@ var renderOffers = function () {
   mapPins.appendChild(fragment);
 };
 
-// Функция вызова обработчика активации страницы по клику
-var getActivePage = function () {
-  var counter = 0;
-  mapPinMain.addEventListener('click', function () {
-    counter++;
-    if (counter === 1) {
-      activationPage();
-      renderOffers();
-      mapPinMain.removeEventListener('click');
-    }
-  });
-};
-
-// Функция активации страницы
-var activationPage = function () {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  unsetDisabled(adFormInputsSelects);
-  unsetDisabled(mapFiltersInputsSelects);
-};
-
-
 // Функция получения координат острого конца Главного Пина
 var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
   var mapCoordinates = map.getBoundingClientRect();
   var pinMainCoordinates = mapPinMain.getBoundingClientRect();
-  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2;
-  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT;
+  var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
+  var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
   adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
 };
 
@@ -117,7 +95,17 @@ mapPinMain.addEventListener('mouseup', function () {
   getPinMainCoordinates();
 });
 
-getActivePage();
+// Функция активации страницы
+var getActivePage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  unsetDisabled(adFormInputsSelects);
+  unsetDisabled(mapFiltersInputsSelects);
+  renderOffers();
+  mapPinMain.removeEventListener('click', getActivePage);
+};
+
+mapPinMain.addEventListener('click', getActivePage);
 
 // Часть вторая
 
