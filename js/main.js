@@ -82,29 +82,64 @@ var renderOffers = function () {
   mapPins.appendChild(fragment);
 };
 
-var counter = 0;
-mapPinMain.addEventListener('click', function () {
-  counter++;
-  if (counter === 1) {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    unsetDisabled(adFormInputsSelects);
-    unsetDisabled(mapFiltersInputsSelects);
-    renderOffers();
-  }
-});
-
-adFormAddressInput.value = '570, 375';
-
 // Функция получения координат острого конца Главного Пина
-var getPinMainCoordinates = function (elementWidth, elementHeight) { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
+var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
   var mapCoordinates = map.getBoundingClientRect();
   var pinMainCoordinates = mapPinMain.getBoundingClientRect();
-  var pinMainLeft = pinMainCoordinates.left - mapCoordinates.left + elementWidth / 2;
-  var pinMainTop = pinMainCoordinates.top - mapCoordinates.top + elementHeight;
-  adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
+  var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
+  var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
+  adFormAddressInput.value = pinMainLeft + ', ' + pinMainTop;
 };
 
 mapPinMain.addEventListener('mouseup', function () {
-  getPinMainCoordinates(PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+  getPinMainCoordinates();
+});
+
+// Функция активации страницы
+var getActivePage = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  unsetDisabled(adFormInputsSelects);
+  unsetDisabled(mapFiltersInputsSelects);
+  renderOffers();
+  mapPinMain.removeEventListener('click', getActivePage);
+};
+
+mapPinMain.addEventListener('click', getActivePage);
+
+// Часть вторая
+
+var inputPrice = adForm.querySelector('#price');
+var inputType = adForm.querySelector('#type');
+var inputTimeIn = adForm.querySelector('#timein');
+var inputTimeOut = adForm.querySelector('#timeout');
+var TypePrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
+// Валидация данных формы заголовка сразу в HTML minlength="30" maxlength="100" required
+
+// Валидация данных формы типа жилья. Смнхронизация тип-цена через объект TypePrice
+var onFieldTypeChange = function (type) {
+  inputPrice.min = TypePrice[type];
+  inputPrice.placeholder = TypePrice[type];
+};
+
+inputType.addEventListener('change', function () {
+  onFieldTypeChange(inputType.value);
+});
+
+// Запрещаем ручное редактирование поля адреса в HTML. Когда к тегу <input> добавляется атрибут readonly, текстовое
+// поле не может изменяться пользователем, в том числе вводиться новый текст или модифицироваться существующий. Тем не менее, состояние и содержимое поля можно менять с помощью скриптов.
+
+// Связываем время заезда и выезда
+inputTimeIn.addEventListener('input', function () {
+  inputTimeOut.value = inputTimeIn.value;
+});
+
+inputTimeOut.addEventListener('input', function () {
+  inputTimeIn.value = inputTimeOut.value;
 });
