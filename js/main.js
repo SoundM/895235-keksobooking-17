@@ -82,30 +82,13 @@ var renderOffers = function () {
   mapPins.appendChild(fragment);
 };
 
-<<<<<<< HEAD
-=======
-var counter = 0;
-mapPinMain.addEventListener('click', function () {
-  counter++;
-  if (counter === 1) {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    unsetDisabled(adFormInputsSelects);
-    unsetDisabled(mapFiltersInputsSelects);
-    renderOffers();
-  }
-});
-
-adFormAddressInput.value = '570, 375';
-
->>>>>>> master
 // Функция получения координат острого конца Главного Пина
 var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
   var mapCoordinates = map.getBoundingClientRect();
   var pinMainCoordinates = mapPinMain.getBoundingClientRect();
   var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
   var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
-  adFormAddressInput.value = pinMainLeft + ',' + pinMainTop;
+  adFormAddressInput.value = pinMainLeft + ', ' + pinMainTop;
 };
 
 mapPinMain.addEventListener('mouseup', function () {
