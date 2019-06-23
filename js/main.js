@@ -7,11 +7,14 @@ var PIN_HEIGHT = 70;
 var PIN_MAIN_WIDTH = 65;
 var PIN_MAIN_HEIGHT = 87;
 var widthMap = document.querySelector('.map').offsetWidth;
+var MAP_MIN_HEIHT = 130;
+var MAP_MAX_HEIGHT = 630;
+var pageIsActive = false;
 
 
 var adForm = document.querySelector('.ad-form');
 var adFormInputsSelects = adForm.querySelectorAll('input, select');
-var adFormAddressInput = adForm.querySelector('#address');
+var inputAddress = adForm.querySelector('#address');
 
 var map = document.querySelector('.map');
 var mapFilters = map.querySelector('.map__filters');
@@ -50,7 +53,7 @@ var createRandomOffers = function () {
     var avatar = 'img/avatars/user0' + (i + 1) + '.png';
     var type = OFFER_TYPE[getRandomNumber(0, OFFER_TYPE.length - 1)];
     var locationX = getRandomNumber(PIN_WIDTH / 2, widthMap - PIN_WIDTH / 2) + 'px';
-    var locationY = getRandomNumber(130, 630 - PIN_HEIGHT) + 'px';
+    var locationY = getRandomNumber(MAP_MIN_HEIHT, MAP_MAX_HEIGHT - PIN_HEIGHT) + 'px';
     var location = [locationX, locationY];
 
     var offer = { // Можно короче в 4 строки сразу author: 'img/avatars/user0' + (i + 1) + '.png'; но смущает ТЗ
@@ -82,19 +85,6 @@ var renderOffers = function () {
   mapPins.appendChild(fragment);
 };
 
-// Функция получения координат острого конца Главного Пина
-var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
-  var mapCoordinates = map.getBoundingClientRect();
-  var pinMainCoordinates = mapPinMain.getBoundingClientRect();
-  var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
-  var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
-  adFormAddressInput.value = pinMainLeft + ', ' + pinMainTop;
-};
-
-mapPinMain.addEventListener('mouseup', function () {
-  getPinMainCoordinates();
-});
-
 // Функция активации страницы
 var getActivePage = function () {
   map.classList.remove('map--faded');
@@ -107,7 +97,8 @@ var getActivePage = function () {
 
 mapPinMain.addEventListener('click', getActivePage);
 
-// Часть вторая
+
+// Валидация формы
 
 var inputPrice = adForm.querySelector('#price');
 var inputType = adForm.querySelector('#type');
@@ -143,3 +134,96 @@ inputTimeIn.addEventListener('input', function () {
 inputTimeOut.addEventListener('input', function () {
   inputTimeIn.value = inputTimeOut.value;
 });
+
+
+// Перемещение mapPinMain на карте
+
+// функция для записи координат указателя пина mapPinMain в поле с адресом
+// Функция получения координат острого конца Главного Пина
+(function () {
+  var startCoords = { // Начальные координаты точки курсора, с которой мы начали перемещать пин
+    x: 0,
+    y: 0
+  };
+  var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
+    var mapCoordinates = map.getBoundingClientRect();
+    var pinMainCoordinates = mapPinMain.getBoundingClientRect();
+    var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
+    var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
+    inputAddress.value = pinMainLeft + ', ' + pinMainTop;
+  };
+
+  // Функция обработчика события нажатия мышки
+  var onMouseDown = function (evtMouseDown) {
+    evtMouseDown.preventDefault();
+    startCoords = { // Координаты точки, с которой мы начали перемещать пин
+      x: evtMouseDown.clientX,
+      y: evtMouseDown.clientY
+    };
+    return startCoords;
+  };
+
+  // Функция вычисления координат от смещения
+  var onMouseMove = function (evtMouseMove) {
+    evtMouseMove.preventDefault();
+
+    var shift = {
+      x: startCoords.x - evtMouseMove.clientX,
+      y: startCoords.y - evtMouseMove.clientY
+    };
+
+    startCoords = {
+      x: evtMouseMove.clientX,
+      y: evtMouseMove.clientY
+    };
+
+    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+
+    var curX = (mapPinMain.offsetLeft - shift.x) + Math.ceil(PIN_MAIN_WIDTH / 2);
+    var curY = (mapPinMain.offsetTop - shift.y) + PIN_MAIN_HEIGHT;
+
+    // здесь мы проверям не вынесли ли пин за границы карты
+    if (curX <= 0) {
+      mapPinMain.style.left = (-1) * Math.floor(PIN_MAIN_WIDTH / 2) + 'px';
+    }
+
+    if (curX >= widthMap) {
+      mapPinMain.style.left = Math.ceil(widthMap - PIN_MAIN_WIDTH / 2) + 'px';
+    }
+
+    if (curY <= MAP_MIN_HEIHT) {
+      mapPinMain.style.top = MAP_MIN_HEIHT - PIN_MAIN_HEIGHT + 'px';
+    }
+
+    if (curY >= MAP_MAX_HEIGHT) {
+      mapPinMain.style.top = MAP_MAX_HEIGHT - PIN_MAIN_HEIGHT + 'px';
+    }
+
+    getPinMainCoordinates();
+  };
+
+  // Функция сброса обработчика события движения и отпускания мыши
+  var onMouseUp = function (evtMouseUp) {
+    evtMouseUp.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+
+    if (pageIsActive) {
+      var onClickPreventDefault = function (moveEvt) {
+        moveEvt.preventDefault();
+        mapPinMain.removeEventListener('click', onClickPreventDefault);
+      };
+      mapPinMain.addEventListener('click', onClickPreventDefault);
+    }
+  };
+
+  mapPinMain.addEventListener('mousedown', function (evtMouseDown) { // обработаем событие начала перетаскивания нашегодиалога mousedown.
+    evtMouseDown.preventDefault();
+    pageIsActive = true; // выбор аватара — это нажатие без перемещения, а если мы нажали и начали двигать курсор,то действие выбора файла надо отменить
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+})();
