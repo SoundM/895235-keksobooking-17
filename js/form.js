@@ -13,6 +13,25 @@
     'house': 5000,
     'palace': 10000
   };
+  var adFormInputsSelects = window.main.adFormInputsSelects;
+  var mapFiltersInputsSelects = window.main.mapFiltersInputsSelects;
+
+  // Функция расстановки disabled для input и select в форме
+  var setDisabled = function (arr) {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  // Функция снятия disabled
+  window.unsetDisabled = function (arr) {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].removeAttribute('disabled');
+    }
+  };
+
+  setDisabled(adFormInputsSelects);
+  setDisabled(mapFiltersInputsSelects);
 
   // Валидация данных формы заголовка сразу в HTML minlength="30" maxlength="100" required
 
