@@ -1,24 +1,27 @@
 'use strict';
 
 (function () {
+  var PIN_WIDTH = 50;
+  var PIN_HEIGHT = 70;
   var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
   var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
-  var offers = window.data.offers;
+
+  var createOffer = function (pinElement) {
+    var offerElement = pin.cloneNode(true);
+    var pinCoordX = 'left: ' + (pinElement.location.x - PIN_WIDTH / 2) + 'px';
+    var pinCoordY = 'top: ' + (pinElement.location.y - PIN_HEIGHT) + 'px';
+    offerElement.setAttribute('style', pinCoordX + '; ' + pinCoordY);
+    offerElement.querySelector('img').setAttribute('src', pinElement.author.avatar);
+    offerElement.querySelector('img').setAttribute('alt', pinElement.offer.title);
+    return offerElement;
+  };
 
   // Добавляем массив предложений в документ
-  window.renderOffers = function () {
+  window.successHandler = function (pins) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < offers.length; i++) {
-      var offerElement = pin.cloneNode(true);
-      var pinView = offerElement.querySelector('.map__pin img');
-
-      offerElement.style.left = offers[i].location[0];
-      offerElement.style.top = offers[i].location[1];
-      pinView.src = offers[i].author;
-      pinView.alt = 'Заголовок объявления';
-
-      fragment.appendChild(offerElement);
+    for (var i = 0; i < pins.length; i++) {
+      fragment.appendChild(createOffer(pins[i]));
     }
     mapPins.appendChild(fragment);
   };
