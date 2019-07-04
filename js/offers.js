@@ -17,13 +17,17 @@
   };
 
   // Добавляем массив предложений в документ
-  window.successHandler = function (pins) {
+  var successHandler = function (pins) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < pins.length; i++) {
       fragment.appendChild(createOffer(pins[i]));
     }
     mapPins.appendChild(fragment);
+  };
+
+  window.offers = {
+    successHandler: successHandler
   };
 
 })();
