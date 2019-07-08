@@ -106,7 +106,7 @@
         moveEvt.preventDefault();
         getActivePage();
         if (counter === 0) {
-          window.backend.load(window.offers.successHandler, window.backend.errorHandler);
+          window.backend.load(window.filter.successHandler, window.backend.errorHandler);
           counter++;
         }
         mapPinMain.removeEventListener('click', onClickPreventDefault);
