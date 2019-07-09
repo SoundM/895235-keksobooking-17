@@ -17,7 +17,7 @@
   };
 
   // Добавляем массив предложений в документ
-  var successHandler = function (pins) {
+  var renderOffers = function (pins) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < pins.length; i++) {
@@ -26,8 +26,16 @@
     mapPins.appendChild(fragment);
   };
 
+  var removeOffers = function () {
+    var renderedPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    renderedPins.forEach(function (value) {
+      value.remove();
+    });
+  };
+
   window.offers = {
-    successHandler: successHandler
+    renderOffers: renderOffers,
+    removeOffers: removeOffers
   };
 
 })();
