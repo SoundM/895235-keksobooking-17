@@ -7,14 +7,14 @@
   var offersPins = [];
 
   housingTypeFilter.addEventListener('change', function () {
-    onCurrentHousingTypeFilterChenge();
+    currentHousingTypeFilterChange();
   });
 
 
-  var onCurrentHousingTypeFilterChenge = (function () {
+  var currentHousingTypeFilterChange = function () {
     currentHousingTypeFilter = housingTypeFilter.value;
     filterOffers();
-  });
+  };
 
   var filterOffers = function () {
     window.offers.removeOffers();
@@ -23,7 +23,7 @@
       if (currentHousingTypeFilter !== 'any') {
         return it.offer.type === currentHousingTypeFilter;
       }
-      return offersPins;
+      return true;
     });
 
     window.offers.renderOffers(sameOffersPins.slice(0, MAX_PINS));
