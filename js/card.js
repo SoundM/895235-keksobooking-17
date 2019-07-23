@@ -86,17 +86,13 @@
   };
 
 
-  var setCard = function (pins) {
-    var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < selectPins.length; i++) {
-      selectPins[i].addEventListener('click', function () {
-        cardControl(pins[0]);
-        openPopup();
-      });
-    }
+  var setCard = function (pinElement) {
+    cardControl(pinElement);
+    openPopup();
   };
 
   window.card = {
+    renderCard: renderCard,
     setCard: setCard
   };
 

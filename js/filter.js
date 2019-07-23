@@ -27,7 +27,7 @@
     });
 
     window.offers.renderOffers(sameOffersPins.slice(0, MAX_PINS));
-    window.card.setCard(offersPins);
+    // window.card.setCard(offersPins);
   };
 
   var successHandler = function (data) {
