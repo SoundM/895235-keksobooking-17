@@ -13,6 +13,9 @@
     offerElement.setAttribute('style', pinCoordX + '; ' + pinCoordY);
     offerElement.querySelector('img').setAttribute('src', pinElement.author.avatar);
     offerElement.querySelector('img').setAttribute('alt', pinElement.offer.title);
+    offerElement.addEventListener('click', function () {
+      window.card.setCard(pinElement);
+    });
     return offerElement;
   };
 
