@@ -27,6 +27,7 @@
     });
 
     window.offers.renderOffers(sameOffersPins.slice(0, MAX_PINS));
+    window.card.setCard(offersPins);
   };
 
   var successHandler = function (data) {
@@ -35,6 +36,7 @@
   };
 
   window.filter = {
-    successHandler: successHandler
+    successHandler: successHandler,
+    offersPins: offersPins
   };
 })();
