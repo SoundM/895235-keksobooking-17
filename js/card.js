@@ -5,7 +5,6 @@
   var card = document.querySelector('#card').content.querySelector('.map__card');
   var cardPopup = card.cloneNode(true);
   var filtersContainer = map.querySelector('.map__filters-container');
-  // var pin = [];
   var HousingType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -75,8 +74,8 @@
     return cardPopup;
   };
 
-  var cardControl = function (info) {
-    renderCard(info);
+  var cardControl = function (cardElement) {
+    renderCard(cardElement);
     map.insertBefore(cardPopup, filtersContainer);
 
     var popupClose = map.querySelector('.popup__close');
