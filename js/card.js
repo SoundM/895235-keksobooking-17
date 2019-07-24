@@ -1,17 +1,17 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var card = document.querySelector('#card').content.querySelector('.map__card');
-  var cardPopup = card.cloneNode(true);
-  var filtersContainer = map.querySelector('.map__filters-container');
+  var ESC_KEYCODE = 27;
   var HousingType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
     house: 'Дом',
     palace: 'Дворец'
   };
-  var ESC_KEYCODE = 27;
+  var map = document.querySelector('.map');
+  var card = document.querySelector('#card').content.querySelector('.map__card');
+  var cardPopup = card.cloneNode(true);
+  var filtersContainer = map.querySelector('.map__filters-container');
 
   var isEscEvent = function (evt, action) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -24,13 +24,13 @@
   };
 
   var closePopup = function () {
-    var popup = document.querySelector('.popup');
+    var popup = map.querySelector('.popup');
     popup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
   var openPopup = function () {
-    var popup = document.querySelector('.popup');
+    var popup = map.querySelector('.popup');
     popup.classList.remove('hidden');
   };
 
@@ -70,13 +70,13 @@
     for (var i = 0; i < cardElement.offer.photos.length; i++) {
       createImgElement(cardPhotos, cardElement.offer.photos[i]);
     }
+    map.insertBefore(cardPopup, filtersContainer);
     cardPopup.classList.add('hidden');
     return cardPopup;
   };
 
   var cardControl = function (cardElement) {
     renderCard(cardElement);
-    map.insertBefore(cardPopup, filtersContainer);
 
     var popupClose = map.querySelector('.popup__close');
     popupClose.addEventListener('click', function () {
@@ -85,14 +85,12 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-
   var setCard = function (pinElement) {
     cardControl(pinElement);
     openPopup();
   };
 
   window.card = {
-    renderCard: renderCard,
     setCard: setCard
   };
 

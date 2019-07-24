@@ -2,9 +2,10 @@
 
 (function () {
   var MAX_PINS = 5;
+  var offersPins = [];
   var housingTypeFilter = document.querySelector('#housing-type');
   var currentHousingTypeFilter = housingTypeFilter.value;
-  var offersPins = [];
+
 
   housingTypeFilter.addEventListener('change', function () {
     currentHousingTypeFilterChange();
@@ -27,7 +28,6 @@
     });
 
     window.offers.renderOffers(sameOffersPins.slice(0, MAX_PINS));
-    // window.card.setCard(offersPins);
   };
 
   var successHandler = function (data) {
