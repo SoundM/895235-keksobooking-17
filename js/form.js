@@ -126,6 +126,9 @@
     window.main.mapPinMain.style.left = '570px';
     window.main.mapPinMain.style.top = '375px';
     inputPrice.placeholder = '5000';
+    window.main.adForm.classList.add('ad-form--disabled');
+    window.main.map.classList.add('map--faded');
+    window.main.map.querySelector('.map__title').classList.add('hidden');
   };
 
   var showSuccessMessage = function () {

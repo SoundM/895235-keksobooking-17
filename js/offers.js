@@ -3,6 +3,7 @@
 (function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
+  var DEBOUNCE_INTERVAL = 500;
   var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
   var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
 
@@ -36,8 +37,21 @@
     });
   };
 
+  var debounce = function (cb) {
+    var lastTimeout = null;
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
+
   window.offers = {
-    renderOffers: renderOffers,
+    renderOffers: debounce(renderOffers),
     removeOffers: removeOffers
   };
 
