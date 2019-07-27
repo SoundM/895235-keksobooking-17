@@ -6,6 +6,11 @@
     window.request.createRequest(onLoad, onError, 'GET', URL_LOAD);
   };
 
+  var save = function (data, onLoad, onError) {
+    var URL_SAVE = 'https://js.dump.academy/keksobooking';
+    window.request.createRequest(onLoad, onError, 'POST', URL_SAVE, data);
+  };
+
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 400px auto; width: 500px; text-align: center; background-color: blue;';
@@ -20,6 +25,7 @@
 
   window.backend = {
     load: load,
+    save: save,
     errorHandler: errorHandler
   };
 })();

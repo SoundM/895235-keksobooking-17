@@ -2,6 +2,7 @@
 
 (function () {
   // Валидация формы
+  var ESC_KEYCODE = 27;
   var TypePrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -23,12 +24,21 @@
   var roomNumber = window.main.adForm.querySelector('#room_number');
   var houseCapacity = window.main.adForm.querySelector('#capacity');
   var optionsGuests = houseCapacity.querySelectorAll('option');
+  var successBlock = document.querySelector('#success').content.querySelector('.success');
+  var mainElement = document.querySelector('main');
+  var errorBlock = document.querySelector('#error').content.querySelector('.error');
 
 
   // Функция расстановки disabled для input и select в форме
   var setDisabled = function (arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAttribute('disabled', 'disabled');
+    }
+    for (var j = 0; j < optionsGuests.length; j++) {
+      optionsGuests[j].setAttribute('disabled', 'disabled');
+      if (optionsGuests[j].hasAttribute('selected')) {
+        optionsGuests[j].removeAttribute('disabled');
+      }
     }
   };
 
@@ -56,16 +66,19 @@
   });
 
   // Валидация данных формы число комнат для количества гостей.
-  roomNumber.addEventListener('click', function (evt) {
+  roomNumber.addEventListener('change', function (evt) {
     var roomsValue = evt.target.options[evt.target.selectedIndex].value;
+    houseCapacity.setCustomValidity('Выберете количество гостей в соответствии с числом комнат');
 
-    [].forEach.call(optionsGuests, function (option) {
-      if (roomsForGuests[roomsValue].includes(option.value)) {
-        option.disabled = false;
-      } else {
-        option.disabled = true;
-      }
+    optionsGuests.forEach(function (option) {
+      option.disabled = !roomsForGuests[roomsValue].includes(option.value);
     });
+  });
+
+  houseCapacity.addEventListener('click', function (evt) {
+    if (evt.target.options[evt.target.selectedIndex].hasAttribute('disabled') !== true) {
+      houseCapacity.setCustomValidity('');
+    }
   });
 
   // Запрещаем ручное редактирование поля адреса в HTML. Когда к тегу <input> добавляется атрибут readonly, текстовое
@@ -80,29 +93,68 @@
     inputTimeIn.value = inputTimeOut.value;
   });
 
+  // Отправляем форму
+  // Сообщение об успешной отправке формы
+  var isEscEvent = function (evt, action) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      action();
+    }
+  };
+
+  var onErrorEscPress = function (evt) {
+    isEscEvent(evt, closePopupError);
+  };
+
+
+  var onSuccessEscPress = function (evt) {
+    isEscEvent(evt, closePopupSuccess);
+  };
+
+  var closePopupError = function () {
+    var errorCard = document.querySelector('.error');
+    errorCard.classList.add('hidden');
+    document.removeEventListener('keydown', onErrorEscPress);
+  };
+
+  var closePopupSuccess = function () {
+    var successCard = document.querySelector('.success');
+    successCard.classList.add('hidden');
+    document.removeEventListener('keydown', onSuccessEscPress);
+  };
+
+  var setDefaultPosition = function () {
+    window.main.mapPinMain.style.left = '570px';
+    window.main.mapPinMain.style.top = '375px';
+    inputPrice.placeholder = '5000';
+  };
+
+  var showSuccessMessage = function () {
+    var successMessage = successBlock.cloneNode(true);
+    mainElement.appendChild(successMessage);
+    mainElement.addEventListener('click', closePopupSuccess);
+    document.addEventListener('keydown', onSuccessEscPress);
+  };
+
+  var successHandler = function () {
+    showSuccessMessage();
+    window.main.adForm.reset();
+    window.offers.removeOffers();
+    setDisabled(adFormInputsSelects);
+    setDefaultPosition();
+  };
+
+  var errorHandler = function (errorMessage) {
+    var errorModule = errorBlock.cloneNode(true);
+    mainElement.appendChild(errorModule);
+    errorBlock.textContent = errorMessage;
+    mainElement.addEventListener('click', closePopupError);
+    document.addEventListener('keydown', onErrorEscPress);
+  };
+
+
+  window.main.adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(window.main.adForm), successHandler, errorHandler);
+  });
+
 })();
-
-/**
- var onFieldRoomsChange = function (value) {
-    optionsGuests.forEach(function (option) {
-      option.disabled = GuestsInRooms[value].indexOf(option.value) === -1;
-    });
-  };
-
-  var onFieldGuestsValidity = function (value) {
-    if (GuestsInRooms[value].indexOf(capacityRooms.value) === -1) {
-      capacityRooms.setCustomValidity('Укажите другое количество гостей');
-    }
-  };
-
-  capacityRooms.addEventListener('change', function () {
-    if (GuestsInRooms[roomNumber.value].indexOf(event.target.value) !== -1) {
-      capacityRooms.setCustomValidity('');
-    }
-  });
-
-  roomNumber.addEventListener('change', function () {
-    onFieldRoomsChange(event.target.value);
-    onFieldGuestsValidity(event.target.value);
-  });
- */
