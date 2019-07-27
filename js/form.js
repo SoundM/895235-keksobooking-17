@@ -34,6 +34,12 @@
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAttribute('disabled', 'disabled');
     }
+    for (var j = 0; j < optionsGuests.length; j++) {
+      optionsGuests[j].setAttribute('disabled', 'disabled');
+      if (optionsGuests[j].hasAttribute('selected')) {
+        optionsGuests[j].removeAttribute('disabled');
+      }
+    }
   };
 
   // Функция снятия disabled
@@ -60,10 +66,8 @@
   });
 
   // Валидация данных формы число комнат для количества гостей.
-  roomNumber.addEventListener('click', function (evt) {
+  roomNumber.addEventListener('change', function (evt) {
     var roomsValue = evt.target.options[evt.target.selectedIndex].value;
-    houseCapacity.value = houseCapacity.hasAttribute('selected');
-    houseCapacity.placeholder = houseCapacity.hasAttribute('selected');
     houseCapacity.setCustomValidity('Выберете количество гостей в соответствии с числом комнат');
 
     optionsGuests.forEach(function (option) {
@@ -72,7 +76,7 @@
   });
 
   houseCapacity.addEventListener('click', function (evt) {
-    if (evt.target.options[evt.target.selectedIndex].hasAttribute('disabled') !== 'disabled') {
+    if (evt.target.options[evt.target.selectedIndex].hasAttribute('disabled') !== true) {
       houseCapacity.setCustomValidity('');
     }
   });
@@ -121,6 +125,7 @@
   var setDefaultPosition = function () {
     window.main.mapPinMain.style.left = '570px';
     window.main.mapPinMain.style.top = '375px';
+    inputPrice.placeholder = '5000';
   };
 
   var showSuccessMessage = function () {
