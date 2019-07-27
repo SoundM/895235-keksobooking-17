@@ -90,8 +90,13 @@
     openPopup();
   };
 
+  var deleteCard = function () {
+    cardPopup.classList.add('hidden');
+  };
+
   window.card = {
-    setCard: setCard
+    setCard: setCard,
+    deleteCard: deleteCard
   };
 
 })();
