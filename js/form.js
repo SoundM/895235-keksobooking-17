@@ -27,6 +27,7 @@
   var successBlock = document.querySelector('#success').content.querySelector('.success');
   var mainElement = document.querySelector('main');
   var errorBlock = document.querySelector('#error').content.querySelector('.error');
+  var adFormReset = window.main.adForm.querySelector('.ad-form__reset');
 
 
   // Функция расстановки disabled для input и select в форме
@@ -47,6 +48,7 @@
     for (var i = 0; i < arr.length; i++) {
       arr[i].removeAttribute('disabled');
     }
+    inputPrice.min = '1000';
   };
 
   setDisabled(adFormInputsSelects);
@@ -123,12 +125,20 @@
   };
 
   var setDefaultPosition = function () {
-    window.main.mapPinMain.style.left = '570px';
-    window.main.mapPinMain.style.top = '375px';
-    inputPrice.placeholder = '5000';
+    setDefaultPositionReset();
     window.main.adForm.classList.add('ad-form--disabled');
     window.main.map.classList.add('map--faded');
     window.main.map.querySelector('.map__title').classList.add('hidden');
+  };
+
+  var setDefaultPositionReset = function () {
+    window.main.adForm.reset();
+    window.main.mapPinMain.style.left = '570px';
+    window.main.mapPinMain.style.top = '375px';
+    inputPrice.placeholder = '5000';
+    inputPrice.min = '1000';
+    window.avatarAndPhoto.removeAvatar();
+    window.avatarAndPhoto.removeImg();
   };
 
   var showSuccessMessage = function () {
@@ -140,7 +150,6 @@
 
   var successHandler = function () {
     showSuccessMessage();
-    window.main.adForm.reset();
     window.offers.removeOffers();
     setDisabled(adFormInputsSelects);
     setDefaultPosition();
@@ -153,6 +162,11 @@
     mainElement.addEventListener('click', closePopupError);
     document.addEventListener('keydown', onErrorEscPress);
   };
+
+  adFormReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    setDefaultPositionReset();
+  });
 
 
   window.main.adForm.addEventListener('submit', function (evt) {

@@ -33,10 +33,8 @@
       return 'low';
     } else if (price >= 10000 && price <= 50000) {
       return 'middle';
-    } else if (price > 50000) {
-      return 'high';
     }
-    return false;
+    return 'high';
   };
 
   var checkPrise = function (it) {
@@ -64,7 +62,6 @@
   };
 
   var filterOffers = function () {
-    window.offers.removeOffers();
     var sameOffersPins = offersPins
       .filter(checkType)
       .filter(checkPrise)
