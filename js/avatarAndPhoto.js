@@ -106,6 +106,7 @@
         value.remove();
       }
     });
+    window.main.adForm.querySelector('label.ad-form__drop-zone').innerHTML = 'Загрузите или&nbsp;перетащите сюда фото';
   };
 
   window.avatarAndPhoto = {
