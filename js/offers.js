@@ -22,6 +22,7 @@
 
   // Добавляем массив предложений в документ
   var renderOffers = function (pins) {
+    removeOffers();
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < pins.length; i++) {

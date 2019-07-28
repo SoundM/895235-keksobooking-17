@@ -129,7 +129,8 @@
     mapFiltersInputsSelects: mapFiltersInputsSelects,
     map: map,
     mapPinMain: mapPinMain,
-    getActivePage: getActivePage
+    getActivePage: getActivePage,
+    getPinMainCoordinates: getPinMainCoordinates
   };
 
 })();
