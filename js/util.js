@@ -1,10 +1,10 @@
 'use strict';
 
 (function () {
+  var DEBOUNCE_INTERVAL = 500;
   var KeyCode = {
     ESC: 27,
   };
-  var DEBOUNCE_INTERVAL = 500;
 
   var isEscEvent = function (evt, action) {
     if (evt.keyCode === KeyCode.ESC) {
