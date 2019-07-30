@@ -2,33 +2,33 @@
 
 // Активация страницы от перемещения mapPinMain на карте
 (function () {
-
-  var adForm = document.querySelector('.ad-form');
-  var adFormInputsSelects = adForm.querySelectorAll('input, select');
-
-  var map = document.querySelector('.map');
-  var mapFilters = map.querySelector('.map__filters');
-  var mapFiltersInputsSelects = mapFilters.querySelectorAll('input, select');
   var PIN_MAIN_WIDTH = 65;
   var PIN_MAIN_HEIGHT = 87;
-  var widthMap = document.querySelector('.map').offsetWidth;
   var MAP_MIN_HEIGHT = 130;
   var MAP_MAX_HEIGHT = 630;
-  var inputAddress = adForm.querySelector('#address');
-  var pageIsActive = false;
-  var mapPinMain = map.querySelector('.map__pin--main');
-
   var startCoords = { // Начальные координаты точки курсора, с которой мы начали перемещать пин
     x: 0,
     y: 0
   };
+  var counter = 0;
+
+  var adForm = document.querySelector('.ad-form');
+  var adFormInputsSelects = adForm.querySelectorAll('input, select');
+  var map = document.querySelector('.map');
+  var mapFilters = map.querySelector('.map__filters');
+  var mapFiltersInputsSelects = mapFilters.querySelectorAll('input, select');
+  var widthMap = document.querySelector('.map').offsetWidth;
+  var inputAddress = adForm.querySelector('#address');
+  var pageIsActive = false;
+  var mapPinMain = map.querySelector('.map__pin--main');
+
 
   // Функция активации страницы
   var getActivePage = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.unsetDisabled(adFormInputsSelects);
-    window.unsetDisabled(mapFiltersInputsSelects);
+    window.form.unsetDisabled(adFormInputsSelects);
+    window.form.unsetDisabled(mapFiltersInputsSelects);
   };
 
   // Функция получения координат острого конца Главного Пина
@@ -91,8 +91,6 @@
     pageIsActive = true;
   };
 
-  var counter = 0;
-
   // Функция сброса обработчика события движения и отпускания мыши
   var onMouseUp = function (evtMouseUp) {
     evtMouseUp.preventDefault();
@@ -109,6 +107,7 @@
           window.backend.load(window.filter.successHandler, window.backend.errorHandler);
           counter++;
         }
+        window.filter.getFirstOffers();
         mapPinMain.removeEventListener('click', onClickPreventDefault);
       };
       counter = counter;

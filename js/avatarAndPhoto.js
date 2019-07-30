@@ -62,8 +62,8 @@
     }
   });
 
-
-  adFormPhotoContainer.addEventListener('dragover', function (evt) { // Данное событие срабатывает каждые несколько сотен
+  adFormPhotoContainer.addEventListener('dragover', function (evt) { // Данное событие срабатывает каждые несколько
+    // сотен
     // милисекунд, когда перемещаемый элемент оказывается над зоной, принимающей перетаскиваемые элементы.
     evt.preventDefault();
     return false;
@@ -105,6 +105,10 @@
       if (adFormPhoto[i].hasAttribute('data-img')) {
         value.remove();
       }
+    });
+    var imgElement = adFormPhotoContainer.querySelectorAll('img');
+    imgElement.forEach(function (value) {
+      value.remove();
     });
     window.main.adForm.querySelector('label.ad-form__drop-zone').innerHTML = 'Загрузите или&nbsp;перетащите сюда фото';
   };

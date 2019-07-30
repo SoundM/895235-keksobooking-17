@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
+
   var HousingType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -13,23 +13,18 @@
   var cardPopup = card.cloneNode(true);
   var filtersContainer = map.querySelector('.map__filters-container');
 
-  var isEscEvent = function (evt, action) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      action();
-    }
+  var onEscPress = function (evt) {
+    window.util.isEscEvent(evt, close);
   };
 
-  var onPopupEscPress = function (evt) {
-    isEscEvent(evt, closePopup);
-  };
-
-  var closePopup = function () {
+  var close = function () {
     var popup = map.querySelector('.popup');
     popup.classList.add('hidden');
-    document.removeEventListener('keydown', onPopupEscPress);
+    window.offers.removeActivesPin();
+    document.removeEventListener('keydown', onEscPress);
   };
 
-  var openPopup = function () {
+  var open = function () {
     var popup = map.querySelector('.popup');
     popup.classList.remove('hidden');
   };
@@ -51,7 +46,7 @@
     el.insertAdjacentElement('afterbegin', img);
   };
 
-  var renderCard = function (cardElement) {
+  var render = function (cardElement) {
     cardPopup.querySelector('.popup__title').innerText = cardElement.offer.title;
     cardPopup.querySelector('.popup__text--address').innerText = cardElement.offer.address;
     cardPopup.querySelector('.popup__text--price').innerText = cardElement.offer.price + '₽/ночь';
@@ -63,40 +58,44 @@
     var cardPhotos = cardPopup.querySelector('.popup__photos');
     cardPopup.querySelector('.popup__avatar').src = cardElement.author.avatar;
     cardFeature.innerHTML = '';
-    for (var j = 0; j < cardElement.offer.features.length; j++) {
-      createLiElement(cardFeature, cardElement.offer.features[j]);
-    }
+
+    cardElement.offer.features.forEach(function (item) {
+      createLiElement(cardFeature, item);
+    });
+
     cardPhotos.innerHTML = '';
-    for (var i = 0; i < cardElement.offer.photos.length; i++) {
-      createImgElement(cardPhotos, cardElement.offer.photos[i]);
-    }
+    cardElement.offer.photos.forEach(function (item) {
+      createImgElement(cardPhotos, item);
+    });
+
     map.insertBefore(cardPopup, filtersContainer);
-    cardPopup.classList.add('hidden');
+
     return cardPopup;
   };
 
-  var cardControl = function (cardElement) {
-    renderCard(cardElement);
+  var setControl = function (cardElement) {
+    render(cardElement);
 
     var popupClose = map.querySelector('.popup__close');
     popupClose.addEventListener('click', function () {
-      closePopup();
+      close();
     });
-    document.addEventListener('keydown', onPopupEscPress);
+    document.addEventListener('keydown', onEscPress);
   };
 
-  var setCard = function (pinElement) {
-    cardControl(pinElement);
-    openPopup();
+  var set = function (pinElement) {
+    window.offers.removeActivesPin();
+    setControl(pinElement);
+    open();
   };
 
-  var deleteCard = function () {
+  var remove = function () {
     cardPopup.classList.add('hidden');
   };
 
   window.card = {
-    setCard: setCard,
-    deleteCard: deleteCard
+    set: set,
+    remove: remove
   };
 
 })();

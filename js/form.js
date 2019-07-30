@@ -2,7 +2,7 @@
 
 (function () {
   // Валидация формы
-  var ESC_KEYCODE = 27;
+
   var TypePrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -32,22 +32,22 @@
 
   // Функция расстановки disabled для input и select в форме
   var setDisabled = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].setAttribute('disabled', 'disabled');
-    }
-    for (var j = 0; j < optionsGuests.length; j++) {
-      optionsGuests[j].setAttribute('disabled', 'disabled');
-      if (optionsGuests[j].hasAttribute('selected')) {
-        optionsGuests[j].removeAttribute('disabled');
+    arr.forEach(function (it) {
+      it.setAttribute('disabled', 'disabled');
+    });
+    optionsGuests.forEach(function (it) {
+      it.setAttribute('disabled', 'disabled');
+      if (it.hasAttribute('selected')) {
+        it.removeAttribute('disabled');
       }
-    }
+    });
   };
 
   // Функция снятия disabled
-  window.unsetDisabled = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].removeAttribute('disabled');
-    }
+  var unsetDisabled = function (arr) {
+    arr.forEach(function (it) {
+      it.removeAttribute('disabled');
+    });
     inputPrice.min = '1000';
   };
 
@@ -60,7 +60,6 @@
   var onFieldTypeChange = function (type) {
     inputPrice.min = TypePrice[type];
     inputPrice.placeholder = inputPrice.min;
-    inputPrice.value = inputPrice.min;
   };
 
   inputType.addEventListener('click', function () {
@@ -78,7 +77,7 @@
   });
 
   houseCapacity.addEventListener('click', function (evt) {
-    if (evt.target.options[evt.target.selectedIndex].hasAttribute('disabled') !== true) {
+    if (!evt.target.options[evt.target.selectedIndex].hasAttribute('disabled')) {
       houseCapacity.setCustomValidity('');
     }
   });
@@ -97,46 +96,43 @@
 
   // Отправляем форму
   // Сообщение об успешной отправке формы
-  var isEscEvent = function (evt, action) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      action();
-    }
-  };
-
   var onErrorEscPress = function (evt) {
-    isEscEvent(evt, closePopupError);
+    window.util.isEscEvent(evt, closeError);
   };
 
 
   var onSuccessEscPress = function (evt) {
-    isEscEvent(evt, closePopupSuccess);
+    window.util.isEscEvent(evt, closeSuccess);
   };
 
-  var closePopupError = function () {
-    var errorCard = document.querySelector('.error');
-    errorCard.classList.add('hidden');
+  var closeError = function () {
+    var errorCard = mainElement.querySelector('.error');
+    errorCard.remove();
+    mainElement.removeEventListener('click', closeError);
     document.removeEventListener('keydown', onErrorEscPress);
   };
 
-  var closePopupSuccess = function () {
-    var successCard = document.querySelector('.success');
-    successCard.classList.add('hidden');
+  var closeSuccess = function () {
+    var successCard = mainElement.querySelector('.success');
+    successCard.remove();
     document.removeEventListener('keydown', onSuccessEscPress);
-  };
-
-  var setDefaultPosition = function () {
-    setDefaultPositionReset();
-    window.main.adForm.classList.add('ad-form--disabled');
-    window.main.map.classList.add('map--faded');
-    window.main.map.querySelector('.map__title').classList.add('hidden');
+    mainElement.removeEventListener('click', closeSuccess);
   };
 
   var setDefaultPositionReset = function () {
+    window.main.adForm.classList.add('ad-form--disabled');
+    window.main.map.classList.add('map--faded');
+    window.main.map.querySelector('.map__title').classList.add('hidden');
+    window.filter.reset();
     window.main.adForm.reset();
     window.main.mapPinMain.style.left = '570px';
     window.main.mapPinMain.style.top = '375px';
     inputPrice.placeholder = '5000';
     inputPrice.min = '1000';
+    setDisabled(adFormInputsSelects);
+    setDisabled(mapFiltersInputsSelects);
+    window.card.remove();
+    window.offers.remove();
     window.avatarAndPhoto.removeAvatar();
     window.avatarAndPhoto.removeImg();
   };
@@ -144,22 +140,20 @@
   var showSuccessMessage = function () {
     var successMessage = successBlock.cloneNode(true);
     mainElement.appendChild(successMessage);
-    mainElement.addEventListener('click', closePopupSuccess);
+    mainElement.addEventListener('click', closeSuccess);
     document.addEventListener('keydown', onSuccessEscPress);
   };
 
   var successHandler = function () {
     showSuccessMessage();
-    window.offers.removeOffers();
-    setDisabled(adFormInputsSelects);
-    setDefaultPosition();
+    setDefaultPositionReset();
   };
 
   var errorHandler = function (errorMessage) {
     var errorModule = errorBlock.cloneNode(true);
     mainElement.appendChild(errorModule);
     errorBlock.textContent = errorMessage;
-    mainElement.addEventListener('click', closePopupError);
+    mainElement.addEventListener('click', closeError);
     document.addEventListener('keydown', onErrorEscPress);
   };
 
@@ -173,5 +167,9 @@
     evt.preventDefault();
     window.backend.save(new FormData(window.main.adForm), successHandler, errorHandler);
   });
+
+  window.form = {
+    unsetDisabled: unsetDisabled
+  };
 
 })();

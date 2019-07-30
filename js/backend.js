@@ -1,14 +1,18 @@
 'use strict';
 
 (function () {
+  var Url = {
+    URL_LOAD: 'https://js.dump.academy/keksobooking/data',
+    URL_SAVE: 'https://js.dump.academy/keksobooking',
+  };
+
+
   var load = function (onLoad, onError) {
-    var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
-    window.request.createRequest(onLoad, onError, 'GET', URL_LOAD);
+    window.request.create(onLoad, onError, 'GET', Url.URL_LOAD);
   };
 
   var save = function (data, onLoad, onError) {
-    var URL_SAVE = 'https://js.dump.academy/keksobooking';
-    window.request.createRequest(onLoad, onError, 'POST', URL_SAVE, data);
+    window.request.create(onLoad, onError, 'POST', Url.URL_SAVE, data);
   };
 
   var errorHandler = function (errorMessage) {

@@ -1,13 +1,14 @@
 'use strict';
 
 (function () {
-  var createRequest = function (onLoad, onError, method, url, data) {
+  var OK_STATUS = 200;
+  var create = function (onLoad, onError, method, url, data) {
     var XHR = new XMLHttpRequest();
     XHR.timeout = 10000;
     XHR.responseType = 'json';
 
     XHR.addEventListener('load', function () {
-      if (XHR.status === 200) {
+      if (XHR.status === OK_STATUS) {
         onLoad(XHR.response);
       } else {
         onError('Статус ответа: ' + XHR.status + ' ' + XHR.statusText);
@@ -25,6 +26,6 @@
   };
 
   window.request = {
-    createRequest: createRequest
+    create: create
   };
 })();

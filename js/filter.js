@@ -3,6 +3,10 @@
 (function () {
   var MAX_PINS = 5;
   var offersPins = [];
+  var PriceRange = {
+    MIN: 10000,
+    MAX: 50000,
+  };
   var mapFilters = document.querySelector('.map__filters');
   var housingType = mapFilters.querySelector('#housing-type');
   var housingPrice = mapFilters.querySelector('#housing-price');
@@ -16,12 +20,12 @@
 
 
   mapFilters.addEventListener('change', function () {
-    window.card.deleteCard();
+    window.card.remove();
     currentHousingTypeFilter = housingType.value;
     currentHousingPriceFilter = housingPrice.value;
     currentHousingRoomsFilter = housingRooms.value;
     currentHousingGuestsFilter = housingGuests.value;
-    filterOffers();
+    getOffers();
   });
 
   var checkType = function (it) {
@@ -29,9 +33,9 @@
   };
 
   var getPriceRange = function (price) {
-    if (price < 10000) {
+    if (price < PriceRange.MIN) {
       return 'low';
-    } else if (price >= 10000 && price <= 50000) {
+    } if (price >= PriceRange.MIN && price <= PriceRange.MAX) {
       return 'middle';
     }
     return 'high';
@@ -52,16 +56,16 @@
   var checkOptions = function (it) {
     var isOptions = [];
     features.forEach(function (feature) {
-      if (feature.checked && !it.offer.features.includes(feature.value)) {
-        isOptions.push(false);
-      } else {
-        isOptions.push(true);
-      }
+      isOptions.push(!(feature.checked && !it.offer.features.includes(feature.value)));
     });
     return (!isOptions.includes(false)) ? it : false;
   };
 
-  var filterOffers = function () {
+  var getFirstOffers = function () {
+    window.offers.render(offersPins.slice(0, MAX_PINS));
+  };
+
+  var getOffers = function () {
     var sameOffersPins = offersPins
       .filter(checkType)
       .filter(checkPrise)
@@ -69,16 +73,23 @@
       .filter(checkGuests)
       .filter(checkOptions);
 
-    window.offers.renderOffers(sameOffersPins.slice(0, MAX_PINS));
+    window.offers.render(sameOffersPins.slice(0, MAX_PINS));
+  };
+
+  var reset = function () {
+    mapFilters.reset();
   };
 
   var successHandler = function (data) {
     offersPins = data;
-    filterOffers();
+    getOffers();
   };
 
   window.filter = {
     successHandler: successHandler,
-    offersPins: offersPins
+    offersPins: offersPins,
+    getOffers: getOffers,
+    getFirstOffers: getFirstOffers,
+    reset: reset
   };
 })();

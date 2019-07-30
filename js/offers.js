@@ -3,11 +3,10 @@
 (function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
-  var DEBOUNCE_INTERVAL = 500;
   var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
   var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
 
-  var createOffer = function (pinElement) {
+  var create = function (pinElement) {
     var offerElement = pin.cloneNode(true);
     var pinCoordX = 'left: ' + (pinElement.location.x - PIN_WIDTH / 2) + 'px';
     var pinCoordY = 'top: ' + (pinElement.location.y - PIN_HEIGHT) + 'px';
@@ -15,45 +14,41 @@
     offerElement.querySelector('img').setAttribute('src', pinElement.author.avatar);
     offerElement.querySelector('img').setAttribute('alt', pinElement.offer.title);
     offerElement.addEventListener('click', function () {
-      window.card.setCard(pinElement);
+      window.card.set(pinElement);
+      offerElement.classList.add('map__pin--active');
     });
     return offerElement;
   };
 
   // Добавляем массив предложений в документ
-  var renderOffers = function (pins) {
-    removeOffers();
+  var render = window.util.debounce(function (pins) {
+    remove();
     var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < pins.length; i++) {
-      fragment.appendChild(createOffer(pins[i]));
-    }
+    pins.forEach(function (it) {
+      fragment.appendChild(create(it));
+    });
     mapPins.appendChild(fragment);
-  };
+  });
 
-  var removeOffers = function () {
-    var renderedPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var remove = function () {
+    var renderedPins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
     renderedPins.forEach(function (value) {
       value.remove();
     });
   };
 
-  var debounce = function (cb) {
-    var lastTimeout = null;
-    return function () {
-      var parameters = arguments;
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(function () {
-        cb.apply(null, parameters);
-      }, DEBOUNCE_INTERVAL);
-    };
+  var removeActivePin = function () {
+    var mapPin = document.querySelectorAll('.map__pin');
+    mapPin.forEach(function (element) {
+      element.classList.remove('map__pin--active');
+    });
   };
 
+
   window.offers = {
-    renderOffers: debounce(renderOffers),
-    removeOffers: removeOffers
+    render: render,
+    remove: remove,
+    removeActivesPin: removeActivePin
   };
 
 })();
