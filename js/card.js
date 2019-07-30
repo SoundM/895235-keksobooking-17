@@ -1,9 +1,7 @@
 'use strict';
 
 (function () {
-  var KeyCode = {
-    ESC: 27,
-  };
+
   var HousingType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -15,14 +13,8 @@
   var cardPopup = card.cloneNode(true);
   var filtersContainer = map.querySelector('.map__filters-container');
 
-  var getEscEvent = function (evt, action) {
-    if (evt.keyCode === KeyCode.ESC) {
-      action();
-    }
-  };
-
   var onEscPress = function (evt) {
-    getEscEvent(evt, close);
+    window.util.isEscEvent(evt, close);
   };
 
   var close = function () {
@@ -66,13 +58,16 @@
     var cardPhotos = cardPopup.querySelector('.popup__photos');
     cardPopup.querySelector('.popup__avatar').src = cardElement.author.avatar;
     cardFeature.innerHTML = '';
-    for (var j = 0; j < cardElement.offer.features.length; j++) {
-      createLiElement(cardFeature, cardElement.offer.features[j]);
-    }
+
+    cardElement.offer.features.forEach(function (item) {
+      createLiElement(cardFeature, item);
+    });
+
     cardPhotos.innerHTML = '';
-    for (var i = 0; i < cardElement.offer.photos.length; i++) {
-      createImgElement(cardPhotos, cardElement.offer.photos[i]);
-    }
+    cardElement.offer.photos.forEach(function (item) {
+      createImgElement(cardPhotos, item);
+    });
+
     map.insertBefore(cardPopup, filtersContainer);
 
     return cardPopup;

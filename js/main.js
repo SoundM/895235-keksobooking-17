@@ -10,6 +10,7 @@
     x: 0,
     y: 0
   };
+  var counter = 0;
 
   var adForm = document.querySelector('.ad-form');
   var adFormInputsSelects = adForm.querySelectorAll('input, select');
@@ -90,8 +91,6 @@
     pageIsActive = true;
   };
 
-  var counter = 0;
-
   // Функция сброса обработчика события движения и отпускания мыши
   var onMouseUp = function (evtMouseUp) {
     evtMouseUp.preventDefault();
@@ -108,7 +107,7 @@
           window.backend.load(window.filter.successHandler, window.backend.errorHandler);
           counter++;
         }
-        window.filter.getOffers();
+        window.filter.getFirstOffers();
         mapPinMain.removeEventListener('click', onClickPreventDefault);
       };
       counter = counter;

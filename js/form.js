@@ -2,9 +2,7 @@
 
 (function () {
   // Валидация формы
-  var KeyCode = {
-    ESC: 27,
-  };
+
   var TypePrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -34,22 +32,22 @@
 
   // Функция расстановки disabled для input и select в форме
   var setDisabled = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].setAttribute('disabled', 'disabled');
-    }
-    for (var j = 0; j < optionsGuests.length; j++) {
-      optionsGuests[j].setAttribute('disabled', 'disabled');
-      if (optionsGuests[j].hasAttribute('selected')) {
-        optionsGuests[j].removeAttribute('disabled');
+    arr.forEach(function (it) {
+      it.setAttribute('disabled', 'disabled');
+    });
+    optionsGuests.forEach(function (it) {
+      it.setAttribute('disabled', 'disabled');
+      if (it.hasAttribute('selected')) {
+        it.removeAttribute('disabled');
       }
-    }
+    });
   };
 
   // Функция снятия disabled
   var unsetDisabled = function (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].removeAttribute('disabled');
-    }
+    arr.forEach(function (it) {
+      it.removeAttribute('disabled');
+    });
     inputPrice.min = '1000';
   };
 
@@ -98,19 +96,13 @@
 
   // Отправляем форму
   // Сообщение об успешной отправке формы
-  var getEscEvent = function (evt, action) {
-    if (evt.keyCode === KeyCode.ESC) {
-      action();
-    }
-  };
-
   var onErrorEscPress = function (evt) {
-    getEscEvent(evt, closeError);
+    window.util.isEscEvent(evt, closeError);
   };
 
 
   var onSuccessEscPress = function (evt) {
-    getEscEvent(evt, closeSuccess);
+    window.util.isEscEvent(evt, closeSuccess);
   };
 
   var closeError = function () {
@@ -131,6 +123,7 @@
     window.main.adForm.classList.add('ad-form--disabled');
     window.main.map.classList.add('map--faded');
     window.main.map.querySelector('.map__title').classList.add('hidden');
+    window.filter.reset();
     window.main.adForm.reset();
     window.main.mapPinMain.style.left = '570px';
     window.main.mapPinMain.style.top = '375px';

@@ -3,7 +3,6 @@
 (function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
-  var DEBOUNCE_INTERVAL = 500;
   var mapPins = document.querySelector('.map__pins'); // блок, в который вставляем созданные метки
   var pin = document.querySelector('#pin').content.querySelector('.map__pin'); // Шаблон, по которому создаем метки
 
@@ -22,18 +21,17 @@
   };
 
   // Добавляем массив предложений в документ
-  var render = function (pins) {
+  var render = window.util.debounce(function (pins) {
     remove();
     var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < pins.length; i++) {
-      fragment.appendChild(create(pins[i]));
-    }
+    pins.forEach(function (it) {
+      fragment.appendChild(create(it));
+    });
     mapPins.appendChild(fragment);
-  };
+  });
 
   var remove = function () {
-    var renderedPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var renderedPins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
     renderedPins.forEach(function (value) {
       value.remove();
     });
@@ -46,21 +44,9 @@
     });
   };
 
-  var debounce = function (cb) {
-    var lastTimeout = null;
-    return function () {
-      var parameters = arguments;
-      if (lastTimeout) {
-        clearTimeout(lastTimeout);
-      }
-      lastTimeout = setTimeout(function () {
-        cb.apply(null, parameters);
-      }, DEBOUNCE_INTERVAL);
-    };
-  };
 
   window.offers = {
-    render: debounce(render),
+    render: render,
     remove: remove,
     removeActivesPin: removeActivePin
   };

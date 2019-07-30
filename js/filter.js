@@ -56,13 +56,13 @@
   var checkOptions = function (it) {
     var isOptions = [];
     features.forEach(function (feature) {
-      if (feature.checked && !it.offer.features.includes(feature.value)) {
-        isOptions.push(false);
-      } else {
-        isOptions.push(true);
-      }
+      isOptions.push(!(feature.checked && !it.offer.features.includes(feature.value)));
     });
     return (!isOptions.includes(false)) ? it : false;
+  };
+
+  var getFirstOffers = function () {
+    window.offers.render(offersPins.slice(0, MAX_PINS));
   };
 
   var getOffers = function () {
@@ -76,6 +76,10 @@
     window.offers.render(sameOffersPins.slice(0, MAX_PINS));
   };
 
+  var reset = function () {
+    mapFilters.reset();
+  };
+
   var successHandler = function (data) {
     offersPins = data;
     getOffers();
@@ -84,6 +88,8 @@
   window.filter = {
     successHandler: successHandler,
     offersPins: offersPins,
-    getOffers: getOffers
+    getOffers: getOffers,
+    getFirstOffers: getFirstOffers,
+    reset: reset
   };
 })();
