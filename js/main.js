@@ -100,18 +100,18 @@
 
 
     if (pageIsActive) {
-      var onClickPreventDefault = function (moveEvt) {
+      var onPreventDefaultClick = function (moveEvt) {
         moveEvt.preventDefault();
         getActivePage();
         if (counter === 0) {
-          window.backend.load(window.filter.successHandler, window.backend.errorHandler);
+          window.backend.load(window.filter.successHandler, window.backend.onErrorShowMessage);
           counter++;
         }
         window.filter.getFirstOffers();
-        mapPinMain.removeEventListener('click', onClickPreventDefault);
+        mapPinMain.removeEventListener('click', onPreventDefaultClick);
       };
       counter = counter;
-      mapPinMain.addEventListener('click', onClickPreventDefault);
+      mapPinMain.addEventListener('click', onPreventDefaultClick);
     }
   };
 

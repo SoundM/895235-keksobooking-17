@@ -2,30 +2,33 @@
 
 (function () {
   var OK_STATUS = 200;
-  var create = function (onLoad, onError, method, url, data) {
-    var XHR = new XMLHttpRequest();
-    XHR.timeout = 10000;
-    XHR.responseType = 'json';
+  var TIMEOUT = 10000;
 
-    XHR.addEventListener('load', function () {
-      if (XHR.status === OK_STATUS) {
-        onLoad(XHR.response);
+  var create = function (onLoad, onError, method, url, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = TIMEOUT;
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === OK_STATUS) {
+        onLoad(xhr.response);
       } else {
-        onError('Статус ответа: ' + XHR.status + ' ' + XHR.statusText);
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
-    XHR.addEventListener('error', function () {
+    xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
-    XHR.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + XHR.timeout + 'мс');
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    XHR.open(method, url);
-    XHR.send(data);
+    xhr.open(method, url);
+    xhr.send(data);
   };
 
   window.request = {
     create: create
   };
+
 })();

@@ -15,6 +15,10 @@
     3: ['1', '2', '3'],
     100: ['0']
   };
+  var MainPinCoord = {
+    LEFT: '570px',
+    TOP: '375px',
+  };
   var adFormInputsSelects = window.main.adFormInputsSelects;
   var mapFiltersInputsSelects = window.main.mapFiltersInputsSelects;
   var inputPrice = window.main.adForm.querySelector('#price');
@@ -48,7 +52,6 @@
     arr.forEach(function (it) {
       it.removeAttribute('disabled');
     });
-    inputPrice.min = '1000';
   };
 
   setDisabled(adFormInputsSelects);
@@ -62,7 +65,7 @@
     inputPrice.placeholder = inputPrice.min;
   };
 
-  inputType.addEventListener('click', function () {
+  inputType.addEventListener('change', function () {
     onFieldTypeChange(inputType.value);
   });
 
@@ -97,26 +100,26 @@
   // Отправляем форму
   // Сообщение об успешной отправке формы
   var onErrorEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeError);
+    window.util.isEscEvent(evt, onErrorClose);
   };
 
 
   var onSuccessEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeSuccess);
+    window.util.isEscEvent(evt, onSuccessClose);
   };
 
-  var closeError = function () {
+  var onErrorClose = function () {
     var errorCard = mainElement.querySelector('.error');
     errorCard.remove();
-    mainElement.removeEventListener('click', closeError);
+    mainElement.removeEventListener('click', onErrorClose);
     document.removeEventListener('keydown', onErrorEscPress);
   };
 
-  var closeSuccess = function () {
+  var onSuccessClose = function () {
     var successCard = mainElement.querySelector('.success');
     successCard.remove();
     document.removeEventListener('keydown', onSuccessEscPress);
-    mainElement.removeEventListener('click', closeSuccess);
+    mainElement.removeEventListener('click', onSuccessClose);
   };
 
   var setDefaultPositionReset = function () {
@@ -125,35 +128,33 @@
     window.main.map.querySelector('.map__title').classList.add('hidden');
     window.filter.reset();
     window.main.adForm.reset();
-    window.main.mapPinMain.style.left = '570px';
-    window.main.mapPinMain.style.top = '375px';
-    inputPrice.placeholder = '5000';
-    inputPrice.min = '1000';
+    window.main.mapPinMain.style.left = MainPinCoord.LEFT;
+    window.main.mapPinMain.style.top = MainPinCoord.TOP;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
     window.card.remove();
     window.offers.remove();
-    window.avatarAndPhoto.removeAvatar();
-    window.avatarAndPhoto.removeImg();
+    window.photo.removeAvatar();
+    window.photo.removeImg();
   };
 
-  var showSuccessMessage = function () {
+  var onSuccessShowMessage = function () {
     var successMessage = successBlock.cloneNode(true);
     mainElement.appendChild(successMessage);
-    mainElement.addEventListener('click', closeSuccess);
+    mainElement.addEventListener('click', onSuccessClose);
     document.addEventListener('keydown', onSuccessEscPress);
   };
 
-  var successHandler = function () {
-    showSuccessMessage();
+  var onSuccess = function () {
+    onSuccessShowMessage();
     setDefaultPositionReset();
   };
 
-  var errorHandler = function (errorMessage) {
+  var onErrorShowMessage = function (errorMessage) {
     var errorModule = errorBlock.cloneNode(true);
     mainElement.appendChild(errorModule);
     errorBlock.textContent = errorMessage;
-    mainElement.addEventListener('click', closeError);
+    mainElement.addEventListener('click', onErrorClose);
     document.addEventListener('keydown', onErrorEscPress);
   };
 
@@ -165,7 +166,7 @@
 
   window.main.adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(window.main.adForm), successHandler, errorHandler);
+    window.backend.save(new FormData(window.main.adForm), onSuccess, onErrorShowMessage);
   });
 
   window.form = {

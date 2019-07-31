@@ -15,7 +15,7 @@
     window.request.create(onLoad, onError, 'POST', Url.URL_SAVE, data);
   };
 
-  var errorHandler = function (errorMessage) {
+  var onErrorShowMessage = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 400px auto; width: 500px; text-align: center; background-color: blue;';
     node.style.position = 'absolute';
@@ -30,6 +30,6 @@
   window.backend = {
     load: load,
     save: save,
-    errorHandler: errorHandler
+    onErrorShowMessage: onErrorShowMessage
   };
 })();

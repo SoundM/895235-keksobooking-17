@@ -47,14 +47,14 @@
   };
 
   var render = function (cardElement) {
-    cardPopup.querySelector('.popup__title').innerText = cardElement.offer.title;
-    cardPopup.querySelector('.popup__text--address').innerText = cardElement.offer.address;
-    cardPopup.querySelector('.popup__text--price').innerText = cardElement.offer.price + '₽/ночь';
-    cardPopup.querySelector('.popup__type').innerText = HousingType[cardElement.offer.type];
-    cardPopup.querySelector('.popup__text--capacity').innerText = cardElement.offer.rooms + ' комнаты для ' + cardElement.offer.guests + ' гостей.';
-    cardPopup.querySelector('.popup__text--time').innerText = 'Заезд после ' + cardElement.offer.checkin + ' выезд до ' + cardElement.offer.checkout;
+    cardPopup.querySelector('.popup__title').textContent = cardElement.offer.title;
+    cardPopup.querySelector('.popup__text--address').textContent = cardElement.offer.address;
+    cardPopup.querySelector('.popup__text--price').textContent = cardElement.offer.price + '₽/ночь';
+    cardPopup.querySelector('.popup__type').textContent = HousingType[cardElement.offer.type];
+    cardPopup.querySelector('.popup__text--capacity').textContent = cardElement.offer.rooms + ' комнаты для ' + cardElement.offer.guests + ' гостей.';
+    cardPopup.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardElement.offer.checkin + ' выезд до ' + cardElement.offer.checkout;
     var cardFeature = cardPopup.querySelector('.popup__features');
-    cardPopup.querySelector('.popup__description').innerText = cardElement.offer.description;
+    cardPopup.querySelector('.popup__description').textContent = cardElement.offer.description;
     var cardPhotos = cardPopup.querySelector('.popup__photos');
     cardPopup.querySelector('.popup__avatar').src = cardElement.author.avatar;
     cardFeature.innerHTML = '';
@@ -73,7 +73,7 @@
     return cardPopup;
   };
 
-  var setControl = function (cardElement) {
+  var onPopupSetControl = function (cardElement) {
     render(cardElement);
 
     var popupClose = map.querySelector('.popup__close');
@@ -85,7 +85,7 @@
 
   var set = function (pinElement) {
     window.offers.removeActivesPin();
-    setControl(pinElement);
+    onPopupSetControl(pinElement);
     open();
   };
 
