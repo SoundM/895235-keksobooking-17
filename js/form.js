@@ -19,7 +19,7 @@
     LEFT: '570px',
     TOP: '375px'
   };
-  var PLACEHOLDERDEFAULT = '1000';
+  var PLACEHOLDER_DEFAULT = '1000';
   var adFormInputsSelects = window.main.adFormInputsSelects;
   var mapFiltersInputsSelects = window.main.mapFiltersInputsSelects;
   var inputPrice = window.main.adForm.querySelector('#price');
@@ -131,7 +131,7 @@
     window.main.adForm.reset();
     window.main.mapPinMain.style.left = MainPinCoord.LEFT;
     window.main.mapPinMain.style.top = MainPinCoord.TOP;
-    inputPrice.placeholder = PLACEHOLDERDEFAULT;
+    inputPrice.placeholder = PLACEHOLDER_DEFAULT;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
     window.card.remove();
