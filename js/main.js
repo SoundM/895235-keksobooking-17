@@ -104,7 +104,7 @@
         moveEvt.preventDefault();
         getActivePage();
         if (counter === 0) {
-          window.backend.load(window.filter.successHandler, window.backend.onErrorShowMessage);
+          window.backend.load(window.filter.onSuccess, window.backend.onErrorShowMessage);
           counter++;
         }
         window.filter.getFirstOffers();

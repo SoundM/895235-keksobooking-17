@@ -5,7 +5,7 @@
   var offersPins = [];
   var PriceRange = {
     MIN: 10000,
-    MAX: 50000,
+    MAX: 50000
   };
   var mapFilters = document.querySelector('.map__filters');
   var housingType = mapFilters.querySelector('#housing-type');
@@ -80,13 +80,13 @@
     mapFilters.reset();
   };
 
-  var successHandler = function (data) {
+  var onSuccess = function (data) {
     offersPins = data;
     getOffers();
   };
 
   window.filter = {
-    successHandler: successHandler,
+    onSuccess: onSuccess,
     offersPins: offersPins,
     getOffers: getOffers,
     getFirstOffers: getFirstOffers,

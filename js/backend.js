@@ -3,7 +3,7 @@
 (function () {
   var Url = {
     URL_LOAD: 'https://js.dump.academy/keksobooking/data',
-    URL_SAVE: 'https://js.dump.academy/keksobooking',
+    URL_SAVE: 'https://js.dump.academy/keksobooking'
   };
 
 

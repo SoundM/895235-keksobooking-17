@@ -3,7 +3,7 @@
 (function () {
   var DEBOUNCE_INTERVAL = 500;
   var KeyCode = {
-    ESC: 27,
+    ESC: 27
   };
 
   var isEscEvent = function (evt, action) {
