@@ -6,7 +6,7 @@
   var PIN_MAIN_HEIGHT = 87;
   var MAP_MIN_HEIGHT = 130;
   var MAP_MAX_HEIGHT = 630;
-  var startCoords = { // Начальные координаты точки курсора, с которой мы начали перемещать пин
+  var StartCoordinates = { // Начальные координаты точки курсора, с которой мы начали перемещать пин
     x: 0,
     y: 0
   };
@@ -43,11 +43,11 @@
   // Функция обработчика события нажатия мышки
   var onMouseDown = function (evtMouseDown) {
     evtMouseDown.preventDefault();
-    startCoords = { // Координаты точки, с которой мы начали перемещать пин
+    StartCoordinates = { // Координаты точки, с которой мы начали перемещать пин
       x: evtMouseDown.clientX,
       y: evtMouseDown.clientY
     };
-    return startCoords;
+    return StartCoordinates;
   };
 
   // Функция вычисления координат от смещения
@@ -55,11 +55,11 @@
     evtMouseMove.preventDefault();
 
     var shift = {
-      x: startCoords.x - evtMouseMove.clientX,
-      y: startCoords.y - evtMouseMove.clientY
+      x: StartCoordinates.x - evtMouseMove.clientX,
+      y: StartCoordinates.y - evtMouseMove.clientY
     };
 
-    startCoords = {
+    StartCoordinates = {
       x: evtMouseMove.clientX,
       y: evtMouseMove.clientY
     };

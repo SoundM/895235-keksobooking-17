@@ -15,7 +15,7 @@
     3: ['1', '2', '3'],
     100: ['0']
   };
-  var MainPinCoord = {
+  var MainPinCoordinates = {
     LEFT: '570px',
     TOP: '375px'
   };
@@ -129,8 +129,8 @@
     window.main.map.querySelector('.map__title').classList.add('hidden');
     window.filter.reset();
     window.main.adForm.reset();
-    window.main.mapPinMain.style.left = MainPinCoord.LEFT;
-    window.main.mapPinMain.style.top = MainPinCoord.TOP;
+    window.main.mapPinMain.style.left = MainPinCoordinates.LEFT;
+    window.main.mapPinMain.style.top = MainPinCoordinates.TOP;
     inputPrice.placeholder = PLACEHOLDER_DEFAULT;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
