@@ -20,7 +20,7 @@
   var widthMap = document.querySelector('.map').offsetWidth;
   var inputAddress = adForm.querySelector('#address');
   var pageIsActive = false;
-  var mapPinMain = map.querySelector('.map__pin--main');
+  var mapPin = map.querySelector('.map__pin--main');
 
 
   // Функция активации страницы
@@ -34,7 +34,7 @@
   // Функция получения координат острого конца Главного Пина
   var getPinMainCoordinates = function () { // https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect
     var mapCoordinates = map.getBoundingClientRect();
-    var pinMainCoordinates = mapPinMain.getBoundingClientRect();
+    var pinMainCoordinates = mapPin.getBoundingClientRect();
     var pinMainLeft = Math.floor(pinMainCoordinates.left - mapCoordinates.left + PIN_MAIN_WIDTH / 2);
     var pinMainTop = Math.floor(pinMainCoordinates.top - mapCoordinates.top + PIN_MAIN_HEIGHT);
     inputAddress.value = pinMainLeft + ', ' + pinMainTop;
@@ -64,27 +64,27 @@
       y: evtMouseMove.clientY
     };
 
-    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
-    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+    mapPin.style.left = (mapPin.offsetLeft - shift.x) + 'px';
+    mapPin.style.top = (mapPin.offsetTop - shift.y) + 'px';
 
-    var curX = (mapPinMain.offsetLeft - shift.x) + Math.ceil(PIN_MAIN_WIDTH / 2);
-    var curY = (mapPinMain.offsetTop - shift.y) + PIN_MAIN_HEIGHT;
+    var curX = (mapPin.offsetLeft - shift.x) + Math.ceil(PIN_MAIN_WIDTH / 2);
+    var curY = (mapPin.offsetTop - shift.y) + PIN_MAIN_HEIGHT;
 
     // здесь мы проверям не вынесли ли пин за границы карты
     if (curX <= 0) {
-      mapPinMain.style.left = (-1) * Math.floor(PIN_MAIN_WIDTH / 2) + 'px';
+      mapPin.style.left = (-1) * Math.floor(PIN_MAIN_WIDTH / 2) + 'px';
     }
 
     if (curX >= widthMap) {
-      mapPinMain.style.left = Math.ceil(widthMap - PIN_MAIN_WIDTH / 2) + 'px';
+      mapPin.style.left = Math.ceil(widthMap - PIN_MAIN_WIDTH / 2) + 'px';
     }
 
     if (curY <= MAP_MIN_HEIGHT) {
-      mapPinMain.style.top = MAP_MIN_HEIGHT - PIN_MAIN_HEIGHT + 'px';
+      mapPin.style.top = MAP_MIN_HEIGHT - PIN_MAIN_HEIGHT + 'px';
     }
 
     if (curY >= MAP_MAX_HEIGHT) {
-      mapPinMain.style.top = MAP_MAX_HEIGHT - PIN_MAIN_HEIGHT + 'px';
+      mapPin.style.top = MAP_MAX_HEIGHT - PIN_MAIN_HEIGHT + 'px';
     }
 
     getPinMainCoordinates();
@@ -108,14 +108,14 @@
           counter++;
         }
         window.filter.getFirstOffers();
-        mapPinMain.removeEventListener('click', onPreventDefaultClick);
+        mapPin.removeEventListener('click', onPreventDefaultClick);
       };
       counter = counter;
-      mapPinMain.addEventListener('click', onPreventDefaultClick);
+      mapPin.addEventListener('click', onPreventDefaultClick);
     }
   };
 
-  mapPinMain.addEventListener('mousedown', function (evtMouseDown) { // обработаем событие начала перетаскивания mousedown.
+  mapPin.addEventListener('mousedown', function (evtMouseDown) { // обработаем событие начала перетаскивания mousedown.
     evtMouseDown.preventDefault();
     onMouseDown(evtMouseDown);
     document.addEventListener('mousemove', onMouseMove);
@@ -127,7 +127,7 @@
     adFormInputsSelects: adFormInputsSelects,
     mapFiltersInputsSelects: mapFiltersInputsSelects,
     map: map,
-    mapPinMain: mapPinMain,
+    mapPin: mapPin,
     getActivePage: getActivePage,
     getPinMainCoordinates: getPinMainCoordinates
   };

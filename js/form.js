@@ -129,8 +129,8 @@
     window.main.map.querySelector('.map__title').classList.add('hidden');
     window.filter.reset();
     window.main.adForm.reset();
-    window.main.mapPinMain.style.left = MainPinCoordinates.LEFT;
-    window.main.mapPinMain.style.top = MainPinCoordinates.TOP;
+    window.main.mapPin.style.left = MainPinCoordinates.LEFT;
+    window.main.mapPin.style.top = MainPinCoordinates.TOP;
     inputPrice.placeholder = PLACEHOLDER_DEFAULT;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
