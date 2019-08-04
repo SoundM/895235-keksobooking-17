@@ -158,10 +158,9 @@
     setDefaultPositionReset();
   };
 
-  var onErrorShowMessage = function (errorMessage) {
+  var onErrorShowMessage = function () {
     var errorModule = errorBlock.cloneNode(true);
     mainElement.appendChild(errorModule);
-    errorBlock.textContent = errorMessage;
     mainElement.addEventListener('click', onErrorClose);
     document.addEventListener('keydown', onErrorEscPress);
   };
