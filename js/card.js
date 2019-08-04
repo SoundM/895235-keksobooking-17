@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var HousingType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
