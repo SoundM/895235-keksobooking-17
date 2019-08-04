@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var AVATAR_DEFAULT = 'img/muffin-grey.svg';
   var avatar = window.main.adForm.querySelector('#avatar');
   var adFormHeaderPreviewImg = window.main.adForm.querySelector('.ad-form-header__preview img');
   var images = window.main.adForm.querySelector('#images');
@@ -45,7 +46,7 @@
         if (adFormPhotoContainer.children.length < 5) {
           adFormPhotoContainer.insertBefore(createPhoto, adFormPhotoContainer.children[adFormPhotoContainer.children.length - 1]);
         } else {
-          window.main.adForm.querySelector('label.ad-form__drop-zone').innerHTML = 'Места для фото больше' +
+          window.main.adForm.querySelector('label.ad-form__drop-zone').textContent = 'Места для фото больше' +
             ' нет';
         }
       });
@@ -96,7 +97,7 @@
   });
 
   var removeAvatar = function () {
-    adFormHeaderPreviewImg.src = 'img/muffin-grey.svg';
+    adFormHeaderPreviewImg.src = AVATAR_DEFAULT;
   };
 
   var removeImg = function () {
@@ -110,7 +111,7 @@
     imgElement.forEach(function (value) {
       value.remove();
     });
-    window.main.adForm.querySelector('label.ad-form__drop-zone').innerHTML = 'Загрузите или&nbsp;перетащите сюда фото';
+    window.main.adForm.querySelector('label.ad-form__drop-zone').textContent = 'Загрузите или перетащите сюда фото';
   };
 
   window.photo = {

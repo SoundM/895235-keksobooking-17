@@ -2,7 +2,7 @@
 
 (function () {
   // Валидация формы
-
+  var PLACEHOLDER_DEFAULT = '1000';
   var TypePrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -19,7 +19,7 @@
     LEFT: '570px',
     TOP: '375px'
   };
-  var PLACEHOLDER_DEFAULT = '1000';
+
   var adFormInputsSelects = window.main.adFormInputsSelects;
   var mapFiltersInputsSelects = window.main.mapFiltersInputsSelects;
   var inputPrice = window.main.adForm.querySelector('#price');
@@ -78,13 +78,19 @@
     optionsGuests.forEach(function (option) {
       option.disabled = !roomsForGuests[roomsValue].includes(option.value);
     });
+    checkCompliance();
   });
 
-  houseCapacity.addEventListener('click', function (evt) {
-    if (!evt.target.options[evt.target.selectedIndex].hasAttribute('disabled')) {
+  houseCapacity.addEventListener('change', function () {
+    houseCapacity.setCustomValidity('');
+  });
+
+  var checkCompliance = function () {
+    var currentIndexOptionsGuests = window.main.adForm.querySelector('#capacity').selectedIndex;
+    if (!optionsGuests[currentIndexOptionsGuests].hasAttribute('disabled')) {
       houseCapacity.setCustomValidity('');
     }
-  });
+  };
 
   // Запрещаем ручное редактирование поля адреса в HTML. Когда к тегу <input> добавляется атрибут readonly, текстовое
   // поле не может изменяться пользователем, в том числе вводиться новый текст или модифицироваться существующий. Тем не менее, состояние и содержимое поля можно менять с помощью скриптов.
