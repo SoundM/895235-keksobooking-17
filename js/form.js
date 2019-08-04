@@ -9,7 +9,7 @@
     'house': 5000,
     'palace': 10000
   };
-  var roomsForGuests = {
+  var RoomsForGuests = {
     1: ['1'],
     2: ['1', '2'],
     3: ['1', '2', '3'],
@@ -76,7 +76,7 @@
     houseCapacity.setCustomValidity('Выберете количество гостей в соответствии с числом комнат');
 
     optionsGuests.forEach(function (option) {
-      option.disabled = !roomsForGuests[roomsValue].includes(option.value);
+      option.disabled = !RoomsForGuests[roomsValue].includes(option.value);
     });
     checkCompliance();
   });
