@@ -30,7 +30,7 @@
   var houseCapacity = window.main.adForm.querySelector('#capacity');
   var optionsGuests = houseCapacity.querySelectorAll('option');
   var successBlock = document.querySelector('#success').content.querySelector('.success');
-  var mainElement = document.querySelector('main');
+  var mainBlock = document.querySelector('main');
   var errorBlock = document.querySelector('#error').content.querySelector('.error');
   var adFormReset = window.main.adForm.querySelector('.ad-form__reset');
 
@@ -116,17 +116,17 @@
   };
 
   var onErrorClose = function () {
-    var errorCard = mainElement.querySelector('.error');
+    var errorCard = mainBlock.querySelector('.error');
     errorCard.remove();
-    mainElement.removeEventListener('click', onErrorClose);
+    mainBlock.removeEventListener('click', onErrorClose);
     document.removeEventListener('keydown', onErrorEscPress);
   };
 
   var onSuccessClose = function () {
-    var successCard = mainElement.querySelector('.success');
+    var successCard = mainBlock.querySelector('.success');
     successCard.remove();
     document.removeEventListener('keydown', onSuccessEscPress);
-    mainElement.removeEventListener('click', onSuccessClose);
+    mainBlock.removeEventListener('click', onSuccessClose);
   };
 
   var setDefaultPositionReset = function () {
@@ -148,8 +148,8 @@
 
   var onSuccessShowMessage = function () {
     var successMessage = successBlock.cloneNode(true);
-    mainElement.appendChild(successMessage);
-    mainElement.addEventListener('click', onSuccessClose);
+    mainBlock.appendChild(successMessage);
+    mainBlock.addEventListener('click', onSuccessClose);
     document.addEventListener('keydown', onSuccessEscPress);
   };
 
@@ -159,9 +159,9 @@
   };
 
   var onErrorShowMessage = function () {
-    var errorModule = errorBlock.cloneNode(true);
-    mainElement.appendChild(errorModule);
-    mainElement.addEventListener('click', onErrorClose);
+    var errorMessage = errorBlock.cloneNode(true);
+    mainBlock.appendChild(errorMessage);
+    mainBlock.addEventListener('click', onErrorClose);
     document.addEventListener('keydown', onErrorEscPress);
   };
 
