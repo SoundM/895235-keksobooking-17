@@ -2,7 +2,10 @@
 
 (function () {
   // Валидация формы
-  var PLACEHOLDER_DEFAULT = '1000';
+  var InputPriceDefault = {
+    PLACEHOLDER: '1000',
+    MIN: '1000'
+  };
   var TypePrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -137,7 +140,8 @@
     window.main.adForm.reset();
     window.main.mapPin.style.left = MainPinCoordinates.LEFT;
     window.main.mapPin.style.top = MainPinCoordinates.TOP;
-    inputPrice.placeholder = PLACEHOLDER_DEFAULT;
+    inputPrice.placeholder = InputPriceDefault.PLACEHOLDER;
+    inputPrice.min = InputPriceDefault.MIN;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
     window.card.remove();

@@ -13,7 +13,7 @@
   var counter = 0;
 
   var adForm = document.querySelector('.ad-form');
-  var adFormInputsSelects = adForm.querySelectorAll('input, select');
+  var adFormInputsSelects = adForm.querySelectorAll('input, select, textarea, button');
   var map = document.querySelector('.map');
   var mapFilters = map.querySelector('.map__filters');
   var mapFiltersInputsSelects = mapFilters.querySelectorAll('input, select');
