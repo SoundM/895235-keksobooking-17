@@ -145,6 +145,7 @@
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
     window.main.mapPinButton.addEventListener('keydown', window.main.onMapPinButtonEnterPress);
+    window.main.mapPinButton.addEventListener('keydown', window.main.onMapPinButtonSpacePress);
     window.card.remove();
     window.offers.remove();
     window.photo.removeAvatar();

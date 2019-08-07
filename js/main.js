@@ -126,19 +126,25 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  // Активация страницы по enter
+  // Активация страницы по enter и пробелу
   var onMapPinButtonEnterPress = function (evt) {
     window.util.isEnterEvent(evt, onActivePageOpen);
+  };
+
+  var onMapPinButtonSpacePress = function (evt) {
+    window.util.isSpaceEvent(evt, onActivePageOpen);
   };
 
   var onActivePageOpen = function () {
     getActivePage();
     getPinMainCoordinates();
     checkDataLoaded();
+    mapPinButton.removeEventListener('keydown', onMapPinButtonSpacePress);
     mapPinButton.removeEventListener('keydown', onMapPinButtonEnterPress);
   };
 
   mapPinButton.addEventListener('keydown', onMapPinButtonEnterPress);
+  mapPinButton.addEventListener('keydown', onMapPinButtonSpacePress);
 
   window.main = {
     adForm: adForm,
@@ -148,6 +154,7 @@
     mapPin: mapPin,
     mapPinButton: mapPinButton,
     onMapPinButtonEnterPress: onMapPinButtonEnterPress,
+    onMapPinButtonSpacePress: onMapPinButtonSpacePress,
     getActivePage: getActivePage,
     getPinMainCoordinates: getPinMainCoordinates
   };
