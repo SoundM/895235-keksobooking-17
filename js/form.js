@@ -144,6 +144,7 @@
     inputPrice.min = InputPriceDefault.MIN;
     setDisabled(adFormInputsSelects);
     setDisabled(mapFiltersInputsSelects);
+    window.main.mapPinButton.addEventListener('keydown', window.main.onMapPinButtonEnterPress);
     window.card.remove();
     window.offers.remove();
     window.photo.removeAvatar();

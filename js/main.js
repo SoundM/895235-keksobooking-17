@@ -21,6 +21,7 @@
   var inputAddress = adForm.querySelector('#address');
   var pageIsActive = false;
   var mapPin = map.querySelector('.map__pin--main');
+  var mapPinButton = map.querySelector('button.map__pin--main');
 
 
   // Функция активации страницы
@@ -29,6 +30,14 @@
     adForm.classList.remove('ad-form--disabled');
     window.form.unsetDisabled(adFormInputsSelects);
     window.form.unsetDisabled(mapFiltersInputsSelects);
+  };
+
+  var checkDataLoaded = function () {
+    if (counter === 0) {
+      window.backend.load(window.filter.onSuccess, window.backend.onErrorShowMessage);
+      counter++;
+    }
+    window.filter.getFirstOffers();
   };
 
   // Функция получения координат острого конца Главного Пина
@@ -103,14 +112,9 @@
       var onPreventDefaultClick = function (moveEvt) {
         moveEvt.preventDefault();
         getActivePage();
-        if (counter === 0) {
-          window.backend.load(window.filter.onSuccess, window.backend.onErrorShowMessage);
-          counter++;
-        }
-        window.filter.getFirstOffers();
+        checkDataLoaded();
         mapPin.removeEventListener('click', onPreventDefaultClick);
       };
-      counter = counter;
       mapPin.addEventListener('click', onPreventDefaultClick);
     }
   };
@@ -122,12 +126,28 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  // Активация страницы по enter
+  var onMapPinButtonEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, onActivePageOpen);
+  };
+
+  var onActivePageOpen = function () {
+    getActivePage();
+    getPinMainCoordinates();
+    checkDataLoaded();
+    mapPinButton.removeEventListener('keydown', onMapPinButtonEnterPress);
+  };
+
+  mapPinButton.addEventListener('keydown', onMapPinButtonEnterPress);
+
   window.main = {
     adForm: adForm,
     adFormInputsSelects: adFormInputsSelects,
     mapFiltersInputsSelects: mapFiltersInputsSelects,
     map: map,
     mapPin: mapPin,
+    mapPinButton: mapPinButton,
+    onMapPinButtonEnterPress: onMapPinButtonEnterPress,
     getActivePage: getActivePage,
     getPinMainCoordinates: getPinMainCoordinates
   };
