@@ -6,6 +6,10 @@
   var PIN_MAIN_HEIGHT = 87;
   var MAP_MIN_HEIGHT = 130;
   var MAP_MAX_HEIGHT = 630;
+  var AddressWithoutMoving = {
+    FIRST: '602, 462',
+    SECOND: '570, 375'
+  };
   var StartCoordinates = { // Начальные координаты точки курсора, с которой мы начали перемещать пин
     x: 0,
     y: 0
@@ -102,7 +106,8 @@
   // Функция сброса обработчика события движения и отпускания мыши
   var onMouseUp = function (evtMouseUp) {
     evtMouseUp.preventDefault();
-    if (inputAddress.value === '602, 462' || inputAddress.value === '570, 375') { //  т.к. в процессе перезагрузки
+    if (inputAddress.value === AddressWithoutMoving.FIRST || inputAddress.value === AddressWithoutMoving.SECOND) { //  т.к. в процессе
+      // перезагрузки
       // или reset браузер сам иногда вызывает mousemove пришлось ввести такое ограничение для предотвращения
       // активации без перемещения пина
       document.removeEventListener('mousemove', onMouseMove);
