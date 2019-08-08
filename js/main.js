@@ -97,12 +97,19 @@
     }
 
     getPinMainCoordinates();
-    pageIsActive = true;
   };
 
   // Функция сброса обработчика события движения и отпускания мыши
   var onMouseUp = function (evtMouseUp) {
     evtMouseUp.preventDefault();
+    if (inputAddress.value === '602, 462' || inputAddress.value === '570, 375') { //  т.к. в процессе перезагрузки
+      // или reset браузер сам иногда вызывает mousemove пришлось ввести такое ограничение для предотвращения
+      // активации без перемещения пина
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      return;
+    }
+    pageIsActive = true;
 
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
